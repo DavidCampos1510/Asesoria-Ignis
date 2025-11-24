@@ -253,8 +253,14 @@ window.addEventListener("scroll", function () {
   });
 });
 
+ document.querySelectorAll(".faq-question").forEach(btn => {
+        btn.addEventListener("click", () => {
+            btn.classList.toggle("active");
+            const content = btn.nextElementSibling;
+            content.style.display = content.style.display === "block" ? "none" : "block";
+        });
+    });
 
-
-
+    
 
 });

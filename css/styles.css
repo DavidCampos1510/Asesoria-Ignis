@@ -1082,3 +1082,113 @@
                 padding: 1.5rem;
             }
         }
+        /* -------------------------------------------------------- */
+/*              ESTILOS PARA PREGUNTAS FRECUENTES           */
+/* -------------------------------------------------------- */
+
+#faq {
+    padding: 5rem 0;
+}
+
+.faq-item {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto 1.2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    background: var(--white);
+    overflow: hidden;
+}
+
+.faq-question {
+    width: 100%;
+    text-align: left;
+    padding: 1.2rem 1.5rem;
+    background: var(--primary-blue);
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.faq-question:hover {
+    background: var(--accent-gold);
+    color: var(--primary-blue);
+}
+
+.faq-question.active {
+    background: var(--accent-gold);
+    color: var(--primary-blue);
+}
+
+.faq-answer {
+    display: none;
+    padding: 1.2rem 1.5rem;
+    background: var(--white);
+    color: var(--text-color);
+    border-left: 4px solid var(--accent-gold);
+}
+
+.faq-answer p {
+    margin: 0;
+}
+
+
+/* -------------------------------------------------------- */
+/*             ESTILOS PARA CALENDARIO DE DISPONIBILIDAD    */
+/* -------------------------------------------------------- */
+
+#disponibilidad {
+    padding: 5rem 0;
+}
+
+.calendario-box {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.calendar-input {
+    width: 100%;
+    padding: 12px;
+    background: var(--white);
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.calendar-input:focus {
+    border-color: var(--primary-blue);
+}
+
+.calendar-response {
+    margin-top: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+
+/* -------------------------------------------------------- */
+/*      AJUSTES PARA QUE LAS NUEVAS SECCIONES SE VEAN       */
+/*     IGUALES A TU ESTILO SOBRIO, ELEGANTE Y MODERNO       */
+/* -------------------------------------------------------- */
+
+#faq h2,
+#disponibilidad h2 {
+    color: var(--primary-blue);
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+}
+
+#faq p,
+#disponibilidad p {
+    text-align: center;
+    max-width: 750px;
+    margin: 0 auto 1.5rem;
+}
