@@ -1192,3 +1192,10 @@
     max-width: 750px;
     margin: 0 auto 1.5rem;
 }
+
+/* Estilos adicionales para el calendario */
+        #calendarSection {
+            padding-top: 100px;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }

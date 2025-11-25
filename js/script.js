@@ -261,6 +261,106 @@ window.addEventListener("scroll", function () {
         });
     });
 
+    // Funcionalidad para mostrar/ocultar contenido y calendario
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Inicializando funcionalidad del calendario...');
     
+    // Elementos principales
+    const header = document.getElementById('header');
+    const mainContent = document.getElementById('mainContent');
+    const calendarSection = document.getElementById('calendarSection');
+    const calendarFrame = document.getElementById('calendarFrame');
+    const btnVolver = document.getElementById('btnVolver');
+    
+    // Verificar que todos los elementos existan
+    if (!header || !mainContent || !calendarSection || !calendarFrame || !btnVolver) {
+        console.error('❌ Error: Faltan elementos esenciales en el DOM');
+        return;
+    }
+    
+    console.log('✅ Todos los elementos encontrados');
+    
+    // Botones "Reservar Hora"
+    const reservarButtons = document.querySelectorAll('a[href="reservar.html"]');
+    console.log('🔘 Botones Reservar Hora encontrados:', reservarButtons.length);
+    
+    // Función para mostrar el calendario
+    function mostrarCalendario() {
+        console.log('📅 Mostrando calendario...');
+        
+        // 1. PRIMERO asegurar que el header sea visible
+        header.style.display = 'block';
+        header.style.visibility = 'visible';
+        header.style.opacity = '1';
+        header.style.position = 'fixed'; // Mantenerlo fijo en la parte superior
+        header.style.top = '0';
+        header.style.left = '0';
+        header.style.width = '100%';
+        header.style.zIndex = '1000';
+        
+        // 2. Ocultar el contenido principal
+        mainContent.style.display = 'none';
+        
+        // 3. Mostrar la sección del calendario CON MARGEN SUPERIOR
+        calendarSection.style.display = 'block';
+        calendarSection.style.paddingTop = '120px'; // Espacio para el header fijo
+        calendarSection.style.minHeight = '100vh';
+        calendarSection.style.backgroundColor = '#f8f9fa';
+        
+        // 4. Cargar el calendario en el iframe
+        if (!calendarFrame.src || calendarFrame.src === 'about:blank') {
+            calendarFrame.src = 'reservar.html';
+        }
+        
+        console.log('✅ Calendario mostrado - Header debería ser visible');
+    }
+    
+    // Función para volver al contenido principal
+    function volverAlContenido() {
+        console.log('↩️ Volviendo al contenido principal...');
+        
+        // 1. Restaurar el header a su estado normal
+        header.style.position = '';
+        header.style.top = '';
+        header.style.left = '';
+        header.style.width = '';
+        header.style.zIndex = '';
+        
+        // 2. Ocultar el calendario
+        calendarSection.style.display = 'none';
+        
+        // 3. Mostrar el contenido principal
+        mainContent.style.display = 'block';
+        
+        console.log('✅ Contenido principal restaurado');
+    }
+    
+    // Agregar event listeners a todos los botones de "Reservar Hora"
+    reservarButtons.forEach((button, index) => {
+        button.addEventListener('click', function(e) {
+            console.log(`🔘 Botón Reservar Hora ${index + 1} clickeado`);
+            e.preventDefault();
+            mostrarCalendario();
+        });
+    });
+    
+    // Event listener para el botón "Volver"
+    btnVolver.addEventListener('click', function(e) {
+        e.preventDefault();
+        volverAlContenido();
+    });
+    
+    // Manejar navegación con el botón "Atrás" del navegador
+    window.addEventListener('popstate', function(event) {
+        if (calendarSection.style.display === 'block') {
+            volverAlContenido();
+        }
+    });
+    
+    console.log('🎉 Funcionalidad del calendario inicializada correctamente');
+});
+
+
+
 
 });
