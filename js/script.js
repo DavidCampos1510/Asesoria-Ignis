@@ -261,105 +261,106 @@ window.addEventListener("scroll", function () {
         });
     });
 
-    // Funcionalidad para mostrar/ocultar contenido y calendario
+// SOLUCIÓN DEFINITIVA PARA HEADER VISIBLE
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Inicializando funcionalidad del calendario...');
+    console.log('🔧 Iniciando solución header...');
     
-    // Elementos principales
+    // Elementos
     const header = document.getElementById('header');
     const mainContent = document.getElementById('mainContent');
     const calendarSection = document.getElementById('calendarSection');
-    const calendarFrame = document.getElementById('calendarFrame');
     const btnVolver = document.getElementById('btnVolver');
     
-    // Verificar que todos los elementos existan
-    if (!header || !mainContent || !calendarSection || !calendarFrame || !btnVolver) {
-        console.error('❌ Error: Faltan elementos esenciales en el DOM');
+    if (!header) {
+        console.error('❌ Header no encontrado');
         return;
     }
     
-    console.log('✅ Todos los elementos encontrados');
+    console.log('✅ Header encontrado:', header);
     
-    // Botones "Reservar Hora"
-    const reservarButtons = document.querySelectorAll('a[href="reservar.html"]');
-    console.log('🔘 Botones Reservar Hora encontrados:', reservarButtons.length);
+    // FORZAR HEADER SIEMPRE VISIBLE
+    function forzarHeaderVisible() {
+        header.style.cssText = `
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            z-index: 9999 !important;
+            background: white !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+        `;
+        console.log('🔧 Header forzado a visible');
+    }
     
-    // Función para mostrar el calendario
+    // Aplicar inmediatamente
+    forzarHeaderVisible();
+    
+    // Función mostrar calendario
     function mostrarCalendario() {
         console.log('📅 Mostrando calendario...');
         
-        // 1. PRIMERO asegurar que el header sea visible
-        header.style.display = 'block';
-        header.style.visibility = 'visible';
-        header.style.opacity = '1';
-        header.style.position = 'fixed'; // Mantenerlo fijo en la parte superior
-        header.style.top = '0';
-        header.style.left = '0';
-        header.style.width = '100%';
-        header.style.zIndex = '1000';
+        // Forzar header visible
+        forzarHeaderVisible();
         
-        // 2. Ocultar el contenido principal
-        mainContent.style.display = 'none';
-        
-        // 3. Mostrar la sección del calendario CON MARGEN SUPERIOR
-        calendarSection.style.display = 'block';
-        calendarSection.style.paddingTop = '120px'; // Espacio para el header fijo
-        calendarSection.style.minHeight = '100vh';
-        calendarSection.style.backgroundColor = '#f8f9fa';
-        
-        // 4. Cargar el calendario en el iframe
-        if (!calendarFrame.src || calendarFrame.src === 'about:blank') {
-            calendarFrame.src = 'reservar.html';
+        // Ocultar contenido principal
+        if (mainContent) {
+            mainContent.style.display = 'none';
         }
         
-        console.log('✅ Calendario mostrado - Header debería ser visible');
+        // Mostrar calendario con espacio para header
+        if (calendarSection) {
+            calendarSection.style.display = 'block';
+            calendarSection.style.paddingTop = '100px';
+            calendarSection.style.minHeight = '100vh';
+            calendarSection.style.background = '#f8f9fa';
+        }
+        
+        console.log('✅ Calendario mostrado');
     }
     
-    // Función para volver al contenido principal
+    // Función volver
     function volverAlContenido() {
-        console.log('↩️ Volviendo al contenido principal...');
+        console.log('↩️ Volviendo...');
         
-        // 1. Restaurar el header a su estado normal
-        header.style.position = '';
-        header.style.top = '';
-        header.style.left = '';
-        header.style.width = '';
-        header.style.zIndex = '';
+        // Forzar header visible
+        forzarHeaderVisible();
         
-        // 2. Ocultar el calendario
-        calendarSection.style.display = 'none';
+        // Ocultar calendario
+        if (calendarSection) {
+            calendarSection.style.display = 'none';
+        }
         
-        // 3. Mostrar el contenido principal
-        mainContent.style.display = 'block';
+        // Mostrar contenido principal
+        if (mainContent) {
+            mainContent.style.display = 'block';
+        }
         
-        console.log('✅ Contenido principal restaurado');
+        console.log('✅ Contenido restaurado');
     }
     
-    // Agregar event listeners a todos los botones de "Reservar Hora"
-    reservarButtons.forEach((button, index) => {
-        button.addEventListener('click', function(e) {
-            console.log(`🔘 Botón Reservar Hora ${index + 1} clickeado`);
+    // Event listeners
+    document.querySelectorAll('a[href="reservar.html"]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
             e.preventDefault();
             mostrarCalendario();
         });
     });
     
-    // Event listener para el botón "Volver"
-    btnVolver.addEventListener('click', function(e) {
-        e.preventDefault();
-        volverAlContenido();
-    });
-    
-    // Manejar navegación con el botón "Atrás" del navegador
-    window.addEventListener('popstate', function(event) {
-        if (calendarSection.style.display === 'block') {
+    if (btnVolver) {
+        btnVolver.addEventListener('click', function(e) {
+            e.preventDefault();
             volverAlContenido();
-        }
-    });
+        });
+    }
     
-    console.log('🎉 Funcionalidad del calendario inicializada correctamente');
+    // Verificar cada segundo que el header esté visible (solo para debug)
+    setInterval(forzarHeaderVisible, 1000);
+    
+    console.log('🎉 Solución header aplicada');
 });
-
 
 
 
