@@ -91,16 +91,51 @@
             font-size: 1rem;
         }
         
-        .btn-primary {
+       .btn.btn-primary {
             background-color: var(--accent-gold);
             color: var(--primary-blue);
+            
+            padding: 10px 20px;        /* altura cómoda */
+            font-size: 0.95rem;
+            font-weight: 600;
+
+            border-radius: 8px;        /* forma redondeada igual a tu imagen */
+            border: none;
+
+            white-space: nowrap;       /* 🔥 evita que se parta en 2 líneas */
+            display: inline-flex;      /* centra texto */
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+            text-decoration: none;     /* evita subrayado */
+
+            transition: 0.3s ease;
         }
+
+        .btn.btn-primary:hover {
+            background-color: #c39d2f; /* tono dorado más oscuro elegante */
+            transform: translateY(-1px);
+        }
+
         
         .btn-primary:hover {
             background-color: #c19c2e;
             transform: translateY(-2px);
         }
-        
+                /* Quita la línea animada debajo de los botones */
+        .nav-menu .btn-primary::after {
+            display: none !important;
+        }
+        /* Evitar que cambie el color del texto del botón */
+        .nav-menu .btn-primary {
+            color: var(--primary-blue) !important;
+        }
+
+        .nav-menu .btn-primary:hover {
+            color: var(--primary-blue) !important;
+        }
+
         .btn-secondary {
             background-color: transparent;
             color: var(--white);
@@ -169,156 +204,219 @@
         
         /* Header y Navegación */
       /* Header y Navegación */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: var(--white);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            transition: var(--transition);
-        }
+      /* -------------------------------- */
+/*            HEADER                */
+/* -------------------------------- */
 
-        .header-scrolled {
-            padding: 10px 0;
-        }
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: var(--white);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999 !important;
+    transition: background-color 0.3s ease, padding 0.3s ease;
+}
 
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 0;
-        }
+/* Header al hacer scroll */
+header.header-scrolled {
+    background-color: #0f172a !important;
+    padding: 8px 0;
+}
 
-        /* Logo modificado para incluir todo el texto en una línea */
-        .logo {
-            font-family: 'Inter', sans-serif; /* Cambiado a Inter para mejor legibilidad */
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary-blue);
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-        }
+header.header-scrolled .nav-menu a,
+header.header-scrolled .logo {
+    color: white !important;
+}
 
-        .logo-content {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+header.header-scrolled .nav-menu a:hover {
+    color: var(--accent-gold) !important;
+}
 
-        .logo-main {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
+header.header-scrolled .nav-menu a::after {
+    background-color: var(--accent-gold);
+}
 
-        .logo-text-line {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-        }
+/* -------------------------------- */
+/*             NAVBAR               */
+/* -------------------------------- */
 
-        .recuadro-dorado {
-            background-color: var(--accent-gold);
-            color: var(--primary-blue);
-            padding: 4px 8px;
-            border-radius: var(--border-radius);
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0;
+}
 
-        .logo i {
-            color: var(--accent-gold);
-            margin-right: 8px;
-        }
+/* -------------------------------- */
+/*               LOGO               */
+/* -------------------------------- */
 
-        .nav-menu {
-            display: flex;
-            align-items: center;
-        }
+.logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary-blue);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
 
-        .nav-menu li {
-            margin-left: 2rem;
-        }
+.logo i {
+    color: var(--accent-gold);
+    margin-right: 8px;
+}
 
-        .nav-menu a {
-            font-weight: 500;
-            color: var(--primary-blue);
-            position: relative;
-        }
+.logo-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
 
-        .nav-menu a:hover {
-            color: var(--accent-gold);
-        }
+.logo-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
 
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent-gold);
-            transition: var(--transition);
-        }
+.logo-text-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
 
-        .nav-menu a:hover::after {
-            width: 100%;
-        }
+.recuadro-dorado {
+    background-color: var(--accent-gold);
+    color: var(--primary-blue);
+    padding: 4px 8px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 0.8rem;
+}
 
-        .hamburger {
-            display: none;
-            cursor: pointer;
-        }
+/* -------------------------------- */
+/*          MENÚ ESCRITORIO         */
+/* -------------------------------- */
 
-        .bar {
-            display: block;
-            width: 25px;
-            height: 3px;
-            margin: 5px auto;
-            background-color: var(--primary-blue);
-            transition: var(--transition);
-        }
+.nav-menu {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
 
-        /* Responsive para el texto en línea */
-        @media (max-width: 1200px) {
-            .logo-content {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
-            
-            .logo-text-line {
-                font-size: 0.8rem;
-            }
-        }
+.nav-menu li {
+    margin-left: 2rem;
+}
 
-        @media (max-width: 992px) {
-            .logo {
-                font-size: 1rem;
-            }
-            
-            .logo-main {
-                font-size: 1.5rem;
-            }
-            
-            .logo-text-line {
-                display: none; /* Ocultamos la línea de texto en tablets */
-            }
-        }
+.nav-menu a {
+    font-weight: 500;
+    color: var(--primary-blue);
+    position: relative;
+    text-decoration: none;
+    transition: var(--transition);
+}
 
-        @media (max-width: 768px) {
-            .logo-text-line {
-                display: none; /* Ocultamos completamente en móviles */
-            }
-            
-            .logo-main {
-                font-size: 1.3rem;
-            }
-        }
+.nav-menu a:hover {
+    color: var(--accent-gold);
+}
+
+.nav-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-gold);
+    transition: var(--transition);
+}
+
+.nav-menu a:hover::after {
+    width: 100%;
+}
+
+/* -------------------------------- */
+/*          MENÚ HAMBURGUESA        */
+/* -------------------------------- */
+
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.bar {
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    background-color: var(--primary-blue);
+    transition: var(--transition);
+}
+
+/* -------------------------------- */
+/* RESPONSIVE                       */
+/* -------------------------------- */
+
+@media (max-width: 1200px) {
+    .logo-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .logo-text-line {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .logo {
+        font-size: 1rem;
+    }
+    .logo-main {
+        font-size: 1.5rem;
+    }
+    .logo-text-line {
+        display: none;
+    }
+}
+
+@media (max-width: 920px) {
+
+    .nav-menu {
+        position: fixed;
+        top: 70px;
+        right: -100%;
+        background: var(--white);
+        width: 250px;
+        flex-direction: column;
+        padding: 20px;
+        gap: 18px;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        transition: right 0.4s ease;
+        z-index: 9999;
+    }
+
+    .nav-menu.active {
+        right: 0;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .logo-main {
+        font-size: 1.3rem;
+    }
+
+    .logo-text-line {
+        display: none;
+    }
+}
+
         
         /* Hero Section */
         .hero {
@@ -1134,69 +1232,47 @@
 .faq-answer p {
     margin: 0;
 }
+/* ===================================== */
+/*     2. CONTENEDOR CALENDARIO (TÚ)     */
+/* ===================================== */
 
-
-/* -------------------------------------------------------- */
-/*             ESTILOS PARA CALENDARIO DE DISPONIBILIDAD    */
-/* -------------------------------------------------------- */
-
-#disponibilidad {
-    padding: 5rem 0;
+.reservar-wrapper {
+    max-width: 900px;
+    margin: 180px auto 40px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    animation: fadeIn 0.5s ease-out;
 }
 
-.calendario-box {
-    width: 100%;
-    max-width: 350px;
-    margin: 0 auto;
+.reservar-title {
     text-align: center;
-}
-
-.calendar-input {
-    width: 100%;
-    padding: 12px;
-    background: var(--white);
-    border: 1px solid #ccc;
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    cursor: pointer;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-}
-
-.calendar-input:focus {
-    border-color: var(--primary-blue);
-}
-
-.calendar-response {
-    margin-top: 1rem;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-
-/* -------------------------------------------------------- */
-/*      AJUSTES PARA QUE LAS NUEVAS SECCIONES SE VEAN       */
-/*     IGUALES A TU ESTILO SOBRIO, ELEGANTE Y MODERNO       */
-/* -------------------------------------------------------- */
-
-#faq h2,
-#disponibilidad h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
     color: var(--primary-blue);
-    font-weight: 700;
-    margin-bottom: 2.5rem;
 }
 
-#faq p,
-#disponibilidad p {
-    text-align: center;
-    max-width: 750px;
-    margin: 0 auto 1.5rem;
+iframe {
+    width: 100%;
+    height: 600px;
+    border: none;
+    border-radius: 8px;
 }
 
-/* Estilos adicionales para el calendario */
-        #calendarSection {
-            padding-top: 100px;
-            background: #f8f9fa;
-            min-height: 100vh;
-        }
+.btn-volver {
+    margin-top: 25px;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px 22px;
+    background: var(--gold);
+    border-radius: 6px;
+    font-weight: 600;
+    color: #0f172a;
+    text-decoration: none;
+}
+
+
 

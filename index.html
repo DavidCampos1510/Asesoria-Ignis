@@ -47,22 +47,7 @@
             </nav>
         </div>
     </header>
-
-    <!-- CONTENEDOR DEL CALENDARIO (OCULTO AL INICIO) -->
-    <div id="calendarSection" style="display:none; padding-top:120px;">
-        <iframe 
-            src="" 
-            id="calendarFrame" 
-            style="width:100%; height:80vh; border:none;">
-        </iframe>
-
-        <div style="text-align:center; margin-top:20px;">
-            <button id="btnVolver" class="btn btn-secondary">Volver</button>
-        </div>
-    </div>
-
-    <!-- MAIN CONTENT (SOLO el contenido principal, SIN el header) -->
-    <div id="mainContent">
+    <main id="contenidoPrincipal">
         <!-- Hero Section -->
         <section class="hero" id="home">
             <div class="container">
@@ -420,7 +405,24 @@
                 </div>
             </div>
         </section>
+    </main>
+        <section id="calendario" style="display:none; margin-top: 120px;">
+            <div class="reservar-wrapper">
+            <h1 class="reservar-title">Reserva tu Hora</h1>
+            <iframe 
+                src="https://calendar.google.com/calendar/embed?src=es.chile%23holiday%40group.v.calendar.google.com&ctz=America%2FSantiago"
+                style="border:0" width="100%" height="800" frameborder="0" scrolling="no">
+            </iframe>
+            </div>
 
+            <!-- Botón para volver -->
+            <div style="text-align:center; margin-top:20px;">
+            <button id="btnVolver" class="btn btn-secondary">Volver</button>
+            </div>
+        </section>
+
+
+    
         <!-- Footer -->
         <footer>
             <div class="container">
@@ -468,7 +470,6 @@
                 </div>
             </div>
         </footer>
-    </div> <!-- cierre de mainContent -->
 
     <!-- Botón de WhatsApp -->
     <a href="https://wa.me/56923641871?text=Hola,%20me%20gustaría%20obtener%20más%20información%20sobre%20sus%20servicios%20legales" class="whatsapp-float" target="_blank">

@@ -261,106 +261,22 @@ window.addEventListener("scroll", function () {
         });
     });
 
-// SOLUCIÓN DEFINITIVA PARA HEADER VISIBLE
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🔧 Iniciando solución header...');
-    
-    // Elementos
-    const header = document.getElementById('header');
-    const mainContent = document.getElementById('mainContent');
-    const calendarSection = document.getElementById('calendarSection');
-    const btnVolver = document.getElementById('btnVolver');
-    
-    if (!header) {
-        console.error('❌ Header no encontrado');
-        return;
-    }
-    
-    console.log('✅ Header encontrado:', header);
-    
-    // FORZAR HEADER SIEMPRE VISIBLE
-    function forzarHeaderVisible() {
-        header.style.cssText = `
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            width: 100% !important;
-            z-index: 9999 !important;
-            background: white !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
-        `;
-        console.log('🔧 Header forzado a visible');
-    }
-    
-    // Aplicar inmediatamente
-    forzarHeaderVisible();
-    
-    // Función mostrar calendario
-    function mostrarCalendario() {
-        console.log('📅 Mostrando calendario...');
-        
-        // Forzar header visible
-        forzarHeaderVisible();
-        
-        // Ocultar contenido principal
-        if (mainContent) {
-            mainContent.style.display = 'none';
-        }
-        
-        // Mostrar calendario con espacio para header
-        if (calendarSection) {
-            calendarSection.style.display = 'block';
-            calendarSection.style.paddingTop = '100px';
-            calendarSection.style.minHeight = '100vh';
-            calendarSection.style.background = '#f8f9fa';
-        }
-        
-        console.log('✅ Calendario mostrado');
-    }
-    
-    // Función volver
-    function volverAlContenido() {
-        console.log('↩️ Volviendo...');
-        
-        // Forzar header visible
-        forzarHeaderVisible();
-        
-        // Ocultar calendario
-        if (calendarSection) {
-            calendarSection.style.display = 'none';
-        }
-        
-        // Mostrar contenido principal
-        if (mainContent) {
-            mainContent.style.display = 'block';
-        }
-        
-        console.log('✅ Contenido restaurado');
-    }
-    
-    // Event listeners
-    document.querySelectorAll('a[href="reservar.html"]').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            mostrarCalendario();
-        });
+
+function mostrarCalendario() {
+    document.getElementById("calendario").style.display = "block";
+
+    // OPCIONAL: hacer scroll suave hacia el calendario
+    window.scrollTo({
+        top: 150,  // altura del header
+        behavior: "smooth"
     });
-    
-    if (btnVolver) {
-        btnVolver.addEventListener('click', function(e) {
-            e.preventDefault();
-            volverAlContenido();
-        });
-    }
-    
-    // Verificar cada segundo que el header esté visible (solo para debug)
-    setInterval(forzarHeaderVisible, 1000);
-    
-    console.log('🎉 Solución header aplicada');
+}
+
+document.getElementById("btnVolver").addEventListener("click", function () {
+    document.getElementById("calendario").style.display = "none";
 });
+
+
 
 
 
