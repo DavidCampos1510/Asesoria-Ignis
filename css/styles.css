@@ -1412,6 +1412,59 @@ footer a:hover {
     box-shadow: 0 3px 15px rgba(0,0,0,0.12);
 }
 
+/* ======== MENÚ MÓVIL ========= */
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger .bar {
+    width: 28px;
+    height: 3px;
+    background: #0c2a4d;
+    margin: 4px 0;
+    transition: 0.3s;
+}
+
+/* MODO ESCRITORIO */
+.nav-menu {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+/* MODO MÓVIL */
+@media (max-width: 992px) {
+
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 65%;
+        height: 100vh;
+        background: #ffffff;
+        flex-direction: column;
+        padding-top: 120px;
+        padding-left: 20px;
+        transition: 0.4s ease;
+        box-shadow: -3px 0 12px rgba(0,0,0,0.15);
+        z-index: 9999;
+    }
+
+    .nav-menu.active {
+        right: 0;
+    }
+
+    .nav-menu li {
+        margin: 15px 0;
+    }
+}
 
 
 
