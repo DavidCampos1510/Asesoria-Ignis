@@ -377,35 +377,4 @@ const observer = new IntersectionObserver((entries) => {
 revealElements.forEach(el => observer.observe(el));
 
 
-
-const toggle = document.getElementById("menuToggle");
-const menuMobile = document.getElementById("menuMobile");
-
-toggle.addEventListener("click", () => {
-    menuMobile.classList.toggle("hidden-menu");
-});
-
-
-// ======== MENÚ MÓVIL ========
-
-// abrir menú
-const hamburger = document.querySelector(".hamburger");
-const navMenu = document.querySelector(".nav-menu");
-
-hamburger.addEventListener("click", () => {
-    navMenu.classList.add("active");
-});
-
-// cerrar menú con X
-document.querySelector(".close-menu").addEventListener("click", () => {
-    navMenu.classList.remove("active");
-});
-
-// cerrar menú al hacer clic en cualquier enlace
-document.querySelectorAll(".nav-menu a").forEach(link => {
-    link.addEventListener("click", () => {
-        navMenu.classList.remove("active");
-    });
-});
-
 });
