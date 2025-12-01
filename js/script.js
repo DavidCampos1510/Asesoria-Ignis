@@ -261,23 +261,120 @@ window.addEventListener("scroll", function () {
         });
     });
 
+// ELEMENTOS
+const contenido = document.getElementById("contenidoPrincipal");
+const calendly = document.getElementById("calendlySection");
+const footer = document.querySelector("footer");
 
-function mostrarCalendario() {
-    document.getElementById("calendario").style.display = "block";
+// Asegurar que al cargar la página el footer esté visible
+footer.style.display = "block";
 
-    // OPCIONAL: hacer scroll suave hacia el calendario
-    window.scrollTo({
-        top: 150,  // altura del header
-        behavior: "smooth"
+// MOSTRAR CALENDLY
+document.getElementById("btnAbrirCalendly").addEventListener("click", function(e) {
+    e.preventDefault(); // por si el botón tiene href="#"
+    contenido.style.display = "none";
+    calendly.style.display = "block";
+    footer.style.display = "none"; // ⬅ OCULTAR FOOTER
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
+
+// BOTÓN VOLVER (solo si existe)
+const btnCerrar2 = document.getElementById("btnCerrarCalendly2");
+if (btnCerrar2) {
+    btnCerrar2.addEventListener("click", function() {
+        calendly.style.display = "none";
+        calendly.classList.remove("mostrar")
+        contenido.style.display = "block";
+        footer.style.display = "block"; // ⬅ MOSTRAR FOOTER
+        window.scrollTo({ top: 0, behavior: "smooth" });
     });
 }
 
-document.getElementById("btnVolver").addEventListener("click", function () {
-    document.getElementById("calendario").style.display = "none";
+// CUANDO EL CLIENTE AGENDA → VOLVER AL INICIO
+window.addEventListener("message", function(e) {
+    if (e.data.event === "calendly.event_scheduled") {
+        calendly.style.display = "none";
+        calendly.classList.add("mostrar");
+        contenido.style.display = "block";
+        footer.style.display = "block"; // ⬅ MOSTRAR FOOTER TAMBIÉN AQUÍ
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+});
+
+const backToTop = document.querySelector(".back-to-top");
+
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 400) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+});
+
+/* 🔥 Cerrar Calendly y navegar correctamente al hacer clic en links del header */
+document.querySelectorAll("#header a").forEach(link => {
+    link.addEventListener("click", (e) => {
+
+        // Si es el botón de Reservar Hora, no tocamos nada aquí
+        if (link.id === "btnAbrirCalendly") {
+            return;
+        }
+
+        const href = link.getAttribute("href");
+
+        // Siempre cerramos Calendly y mostramos el contenido normal
+        calendly.style.display = "none";
+        calendly.classList.remove("mostrar");
+        contenido.style.display = "block";
+        footer.style.display = "block";
+
+        // Si es un enlace a una sección (#home, #services, etc.)
+        if (href && href.startsWith("#")) {
+            e.preventDefault(); // evitamos el comportamiento por defecto
+
+            const destino = document.querySelector(href);
+            if (destino) {
+                // Hacemos scroll suave hacia esa sección
+                destino.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+        // Si es un enlace externo (WhatsApp, redes, etc.), no hacemos preventDefault
+        // y dejamos que funcione normal
+    });
 });
 
 
 
+
+window.addEventListener("message", function(e) {
+    if (e.data.event === "calendly.event_scheduled") {
+
+        // Redirigir a la página principal
+        window.location.href = "127.0.0.1:3000/index.html"; // <-- Cambia si tu archivo tiene otro nombre o ruta
+
+    }
+});
+
+// Sombra en header al hacer scroll
+window.addEventListener("scroll", () => {
+    const header = document.getElementById("header");
+
+    if (window.scrollY > 40) header.classList.add("sticky");
+    else header.classList.remove("sticky");
+});
+
+/* ⭐ Animación de entrada para cada sección */
+const revealElements = document.querySelectorAll(".reveal");
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+        }
+    });
+}, { threshold: 0.2 }); // se activa cuando el 20% es visible
+
+revealElements.forEach(el => observer.observe(el));
 
 
 });

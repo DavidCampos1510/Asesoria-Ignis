@@ -35,7 +35,7 @@
                     <li><a href="#testimonials">Testimonios</a></li>
                     <li><a href="#team">Equipo</a></li>
                     <li><a href="#contact">Contacto</a></li>
-                    <li><a href="reservar.html" class="btn btn-primary">Reservar Hora</a></li>
+                    <li><a id="btnAbrirCalendly" class="btn btn-primary">Reservar Hora</a></li>
                     <li><a href="#contact" class="btn btn-primary">Consulta Gratuita</a></li>
                 </ul>
                 
@@ -49,7 +49,7 @@
     </header>
     <main id="contenidoPrincipal">
         <!-- Hero Section -->
-        <section class="hero" id="home">
+        <section class="hero reveal" id="home">
             <div class="container">
                 <div class="hero-content">
                     <h1>Protegiendo Tus Derechos con Excelencia Legal</h1>
@@ -63,7 +63,7 @@
         </section>
 
         <!-- Servicios Section -->
-        <section class="section-light" id="services">
+        <section class="section-light reveal" id="services">
             <div class="container">
                 <h2>Nuestros Servicios Legales</h2>
                 <div class="services-grid">
@@ -107,7 +107,7 @@
         </section>
 
         <!-- Por Qué Elegirnos Section -->
-        <section class="section-gray" id="why-us">
+        <section class="section-gray reveal" id="why-us">
             <div class="container">
                 <h2>¿Por Qué Elegir Nuestra Asesoria Legal?</h2>
                 <div class="why-us-content">
@@ -169,7 +169,7 @@
         </section>
 
         <!-- Preguntas Frecuentes (FAQ) -->
-        <section class="section-light" id="faq">
+        <section class="section-light reveal" id="faq">
             <div class="container">
                 <h2>Preguntas Frecuentes</h2>
 
@@ -197,14 +197,14 @@
                 <div class="faq-item">
                     <button class="faq-question">¿Puedo agendar por WhatsApp?</button>
                     <div class="faq-answer">
-                        <p>Sí, puedes agendar directamente desde el botón de WhatsApp disponible en la página.</p>
+                        <p>Sí, puedes agendar directamente desde el botón de WhatsApp disponible en la página o tambien desde el boton reservar hora el cual te permitira agendar una hora el dia y la hora que mas le acomode.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Testimonios Section -->
-        <section class="section-light" id="testimonials">
+        <section class="section-light reveal" id="testimonials">
             <div class="container">
                 <h2>Lo Que Dicen Nuestros Clientes</h2>
                 <div class="testimonials-container">
@@ -259,7 +259,7 @@
         </section>
 
         <!-- Equipo Section -->
-        <section class="section-gray" id="team">
+        <section class="section-gray reveal" id="team">
             <div class="container">
                 <h2>Nuestro Equipo Legal</h2>
                 <div class="team-grid">
@@ -294,7 +294,7 @@
         </section>
 
         <!-- Contacto Section -->
-        <section class="section-light" id="contact">
+        <section class="section-light reveal" id="contact">
             <div class="container">
                 <h2>Contáctenos</h2>
                 <div class="contact-container">
@@ -406,23 +406,23 @@
             </div>
         </section>
     </main>
-        <section id="calendario" style="display:none; margin-top: 120px;">
-            <div class="reservar-wrapper">
+         <!-- ⭐ SECCIÓN CALENDLY (OCULTA POR DEFECTO) -->
+        <section id="calendlySection" style="display:none;">
+    
             <h1 class="reservar-title">Reserva tu Hora</h1>
-            <iframe 
-                src="https://calendar.google.com/calendar/embed?src=es.chile%23holiday%40group.v.calendar.google.com&ctz=America%2FSantiago"
-                style="border:0" width="100%" height="800" frameborder="0" scrolling="no">
-            </iframe>
+
+            <div class="calendly-container">
+                <div class="calendly-inline-widget" 
+                    data-url="https://calendly.com/fernanda-herrera-asesorialegalignis/60min"
+                    style="min-width:320px; height:100vh;">
+                </div>
+            </div>
+            <div class="btn-volver-calendly" id="btnCerrarCalendly2">
+                <i class="fas fa-arrow-left"></i> Volver atrás
             </div>
 
-            <!-- Botón para volver -->
-            <div style="text-align:center; margin-top:20px;">
-            <button id="btnVolver" class="btn btn-secondary">Volver</button>
-            </div>
         </section>
 
-
-    
         <!-- Footer -->
         <footer>
             <div class="container">
@@ -456,7 +456,7 @@
                     </div>
 
                     <div class="footer-official-links">
-                        <h4>Enlaces Oficiales</h4>
+                        <h4>Enlaces Oficiales Poder Judicial</h4>
                         <ul>
                             <li><a href="https://www.pjud.cl" target="_blank">Sitio del Poder Judicial</a></li>
                             <li><a href="https://consultadecausas.pjud.cl" target="_blank">Consulta de Causas</a></li>
@@ -480,6 +480,9 @@
     <a href="#" class="back-to-top">
         <i class="fas fa-chevron-up"></i>
     </a>
+
+     <!-- Script oficial de Calendly -->
+    <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
     <script src="js/script.js"></script>
 </body>
