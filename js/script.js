@@ -386,27 +386,26 @@ toggle.addEventListener("click", () => {
 });
 
 
-// MENÚ MÓVIL
-const hamburger = document.querySelector('.hamburger');
-const navMenu = document.querySelector('.nav-menu');
-const closeMenu = document.querySelector('.close-menu');
+// ======== MENÚ MÓVIL ========
 
 // abrir menú
-hamburger.addEventListener('click', () => {
-    navMenu.classList.add('active');
+const hamburger = document.querySelector(".hamburger");
+const navMenu = document.querySelector(".nav-menu");
+
+hamburger.addEventListener("click", () => {
+    navMenu.classList.add("active");
 });
 
-// cerrar con X
-closeMenu.addEventListener('click', () => {
-    navMenu.classList.remove('active');
+// cerrar menú con X
+document.querySelector(".close-menu").addEventListener("click", () => {
+    navMenu.classList.remove("active");
 });
 
-// cerrar al hacer clic en un enlace
-document.querySelectorAll('.nav-menu a').forEach(link => {
-    link.addEventListener('click', () => {
-        navMenu.classList.remove('active');
+// cerrar menú al hacer clic en cualquier enlace
+document.querySelectorAll(".nav-menu a").forEach(link => {
+    link.addEventListener("click", () => {
+        navMenu.classList.remove("active");
     });
 });
-
 
 });

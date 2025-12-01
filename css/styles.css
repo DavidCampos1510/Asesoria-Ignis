@@ -1443,133 +1443,64 @@ footer a:hover {
     transition: 0.3s;
 }
 
-/* ======== MENÚ MÓVIL REPARADO ======== */
-
-/* Mostrar el menú cuando está activo */
-.nav-menu.active {
+/* --- MENU MOBILE --- */
+#menuMobile {
+    position: fixed;
+    top: 70px;
     right: 0;
-    opacity: 1;
-    pointer-events: auto;
+    width: 100%;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 20px 0;
+    text-align: center;
+    transition: 0.4s ease;
+    z-index: 9999;
 }
 
-/* Menú escondido en móvil */
-.nav-menu {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 70%;
-    height: 100%;
-    background: #fff;
-    padding-top: 80px;
-    box-shadow: -4px 0 12px rgba(0,0,0,0.15);
-    transition: 0.4s ease;
+.hidden-menu {
+    transform: translateY(-120%);
     opacity: 0;
     pointer-events: none;
-    z-index: 9999;
 }
 
-/* Botón cerrar (X) */
-.close-menu {
-    position: absolute;
-    top: 20px;
-    right: 25px;
-    font-size: 28px;
-    cursor: pointer;
-    color: #0c2a4d;
+#menuMobile a {
     display: block;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    color: #0c2a4d;
+    text-decoration: none;
 }
 
-/* Ocultar botón cerrar en escritorio */
-@media (min-width: 992px) {
-    .close-menu {
+/* Botones dentro del menú */
+#menuMobile .btn-menu {
+    background: #d4af37;
+    color: #fff;
+    margin: 10px auto;
+    width: 80%;
+    padding: 12px;
+    display: block;
+    border-radius: 8px;
+}
+
+#menuMobile .btn-menu-sec {
+    border: 2px solid #0c2a4d;
+    color: #0c2a4d;
+    margin: 10px auto;
+    width: 80%;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    nav.menu-desktop {
         display: none;
     }
-}
 
-/* ============================== */
-/* HEADER FIJO RESPONSIVE */
-/* ============================== */
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 80px;
-    z-index: 9999;
-    position: relative;
-}
-
-/* Menú hamburguesa — móvil */
-.hamburger {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-}
-
-.hamburger .bar {
-    width: 25px;
-    height: 3px;
-    background: #0c2a4d;
-    margin: 4px 0;
-    transition: 0.3s;
-}
-
-/* Menú móvil cerrado */
-.nav-menu {
-    display: flex;
-    gap: 25px;
-}
-
-/* ====== SOLO MÓVIL ====== */
-@media (max-width: 992px) {
-
-    .hamburger {
+    #menuToggle {
         display: flex;
     }
-
-    .nav-menu {
-        position: fixed;
-        right: -100%;
-        top: 0;
-        width: 70%;
-        height: 100vh;
-        background: #fff;
-        flex-direction: column;
-        padding-top: 80px;
-        padding-left: 20px;
-        transition: 0.4s ease;
-        box-shadow: -3px 0 12px rgba(0,0,0,0.15);
-        z-index: 9999;
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .nav-menu.active {
-        right: 0;
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    /* Botón X para cerrar */
-    .close-menu {
-        position: absolute;
-        top: 20px;
-        right: 25px;
-        font-size: 32px;
-        cursor: pointer;
-        color: #0c2a4d;
-        display: block;
-    }
-
-    /* Estilo enlaces móvil */
-    .nav-menu li {
-        margin: 15px 0;
-    }
 }
 
-/* Ocultar X en escritorio */
-.close-menu {
-    display: none;
-}
 
 
