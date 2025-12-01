@@ -1486,5 +1486,90 @@ footer a:hover {
     }
 }
 
+/* ============================== */
+/* HEADER FIJO RESPONSIVE */
+/* ============================== */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    z-index: 9999;
+    position: relative;
+}
+
+/* Menú hamburguesa — móvil */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger .bar {
+    width: 25px;
+    height: 3px;
+    background: #0c2a4d;
+    margin: 4px 0;
+    transition: 0.3s;
+}
+
+/* Menú móvil cerrado */
+.nav-menu {
+    display: flex;
+    gap: 25px;
+}
+
+/* ====== SOLO MÓVIL ====== */
+@media (max-width: 992px) {
+
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        position: fixed;
+        right: -100%;
+        top: 0;
+        width: 70%;
+        height: 100vh;
+        background: #fff;
+        flex-direction: column;
+        padding-top: 80px;
+        padding-left: 20px;
+        transition: 0.4s ease;
+        box-shadow: -3px 0 12px rgba(0,0,0,0.15);
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .nav-menu.active {
+        right: 0;
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* Botón X para cerrar */
+    .close-menu {
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        font-size: 32px;
+        cursor: pointer;
+        color: #0c2a4d;
+        display: block;
+    }
+
+    /* Estilo enlaces móvil */
+    .nav-menu li {
+        margin: 15px 0;
+    }
+}
+
+/* Ocultar X en escritorio */
+.close-menu {
+    display: none;
+}
 
 
