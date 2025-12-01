@@ -1427,5 +1427,80 @@ footer a:hover {
     filter: blur(0);
 }
 
+/* --- ICONO HAMBURGER --- */
+#menuToggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+
+#menuToggle span {
+    width: 28px;
+    height: 3px;
+    background: #0c2a4d;
+    border-radius: 2px;
+    transition: 0.3s;
+}
+
+/* --- MENU MOBILE --- */
+#menuMobile {
+    position: fixed;
+    top: 70px;
+    right: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    padding: 20px 0;
+    text-align: center;
+    transition: 0.4s ease;
+    z-index: 9999;
+}
+
+.hidden-menu {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+#menuMobile a {
+    display: block;
+    padding: 14px 0;
+    font-size: 1.1rem;
+    color: #0c2a4d;
+    text-decoration: none;
+}
+
+/* Botones dentro del menú */
+#menuMobile .btn-menu {
+    background: #d4af37;
+    color: #fff;
+    margin: 10px auto;
+    width: 80%;
+    padding: 12px;
+    display: block;
+    border-radius: 8px;
+}
+
+#menuMobile .btn-menu-sec {
+    border: 2px solid #0c2a4d;
+    color: #0c2a4d;
+    margin: 10px auto;
+    width: 80%;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    nav.menu-desktop {
+        display: none;
+    }
+
+    #menuToggle {
+        display: flex;
+    }
+}
+
 
 

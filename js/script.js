@@ -377,4 +377,12 @@ const observer = new IntersectionObserver((entries) => {
 revealElements.forEach(el => observer.observe(el));
 
 
+
+const toggle = document.getElementById("menuToggle");
+const menuMobile = document.getElementById("menuMobile");
+
+toggle.addEventListener("click", () => {
+    menuMobile.classList.toggle("hidden-menu");
+});
+
 });
