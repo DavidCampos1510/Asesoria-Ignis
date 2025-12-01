@@ -1443,62 +1443,46 @@ footer a:hover {
     transition: 0.3s;
 }
 
-/* --- MENU MOBILE --- */
-#menuMobile {
-    position: fixed;
-    top: 70px;
+/* ======== MENÚ MÓVIL REPARADO ======== */
+
+/* Mostrar el menú cuando está activo */
+.nav-menu.active {
     right: 0;
-    width: 100%;
-    background: white;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    padding: 20px 0;
-    text-align: center;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Menú escondido en móvil */
+.nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100%;
+    background: #fff;
+    padding-top: 80px;
+    box-shadow: -4px 0 12px rgba(0,0,0,0.15);
     transition: 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
     z-index: 9999;
 }
 
-.hidden-menu {
-    transform: translateY(-120%);
-    opacity: 0;
-    pointer-events: none;
-}
-
-#menuMobile a {
-    display: block;
-    padding: 14px 0;
-    font-size: 1.1rem;
+/* Botón cerrar (X) */
+.close-menu {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 28px;
+    cursor: pointer;
     color: #0c2a4d;
-    text-decoration: none;
-}
-
-/* Botones dentro del menú */
-#menuMobile .btn-menu {
-    background: #d4af37;
-    color: #fff;
-    margin: 10px auto;
-    width: 80%;
-    padding: 12px;
     display: block;
-    border-radius: 8px;
 }
 
-#menuMobile .btn-menu-sec {
-    border: 2px solid #0c2a4d;
-    color: #0c2a4d;
-    margin: 10px auto;
-    width: 80%;
-    padding: 12px;
-    border-radius: 8px;
-}
-
-/* --- RESPONSIVE --- */
-@media (max-width: 900px) {
-    nav.menu-desktop {
+/* Ocultar botón cerrar en escritorio */
+@media (min-width: 992px) {
+    .close-menu {
         display: none;
-    }
-
-    #menuToggle {
-        display: flex;
     }
 }
 
