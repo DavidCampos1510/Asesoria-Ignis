@@ -1238,40 +1238,91 @@ header {
 }
 
 /* =========================================================
-   EQUIPO SECTION
+   NUEVA SECCIÓN EQUIPO - COMPLETAMENTE RESPONSIVA
    ========================================================= */
-.team-grid {
+#team {
+    padding: 5rem 0;
+    background-color: var(--light-gray);
+}
+
+.team-description {
+    max-width: 800px;
+    margin: 0 auto 3rem auto;
+    text-align: center;
+}
+
+.team-description p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+}
+
+.team-focus {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.team-focus h3 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--primary-blue);
+    font-size: 1.8rem;
+}
+
+.focus-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
 }
 
-.team-member {
-    background-color: var(--white);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--box-shadow);
-    transition: var(--transition);
-}
-
-.team-member:hover {
-    transform: translateY(-5px);
-}
-
-.member-photo {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-}
-
-.member-info {
+.focus-item {
+    background: var(--white);
     padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    text-align: center;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    min-height: 280px;
 }
 
-.member-specialty {
+.focus-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.focus-icon {
+    font-size: 2.5rem;
     color: var(--accent-gold);
-    font-weight: 500;
+    margin-bottom: 1.5rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.focus-item h4 {
+    color: var(--primary-blue);
     margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.focus-item p {
+    color: var(--text-color);
+    line-height: 1.6;
+    font-size: 1rem;
+    flex-grow: 1;
+    margin: 0;
 }
 
 /* =========================================================
@@ -1664,6 +1715,7 @@ footer a:hover {
     
     h3 {
         font-size: 1.3rem;
+        margin-bottom: 1rem;
     }
     
     section {
@@ -1714,13 +1766,46 @@ footer a:hover {
         padding: 1rem;
     }
     
-    /* EQUIPO */
-    .team-member {
-        margin-bottom: 2rem;
+    /* NUEVA SECCIÓN EQUIPO - RESPONSIVE */
+    .team-description p {
+        font-size: 1.1rem;
+        padding: 0 10px;
     }
     
-    .member-photo {
-        height: 250px;
+    .team-focus h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        padding: 0 15px;
+    }
+    
+    .focus-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 0 15px;
+    }
+    
+    .focus-item {
+        min-height: 250px;
+        padding: 1.5rem 1rem;
+        margin: 0 auto;
+        max-width: 100%;
+    }
+    
+    .focus-icon {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        height: 50px;
+    }
+    
+    .focus-item h4 {
+        font-size: 1.1rem;
+        min-height: 50px;
+        margin-bottom: 0.8rem;
+    }
+    
+    .focus-item p {
+        font-size: 0.95rem;
+        line-height: 1.5;
     }
     
     /* BOTONES FLOTANTES */
@@ -1807,7 +1892,7 @@ footer a:hover {
     }
 }
 
-/* Para pantallas muy pequeñas */
+/* Para pantallas muy pequeñas (móviles pequeños) */
 @media (max-width: 480px) {
     h1 {
         font-size: 1.8rem;
@@ -1873,6 +1958,77 @@ footer a:hover {
     .client-photo {
         width: 70px;
         height: 70px;
+    }
+    
+    /* NUEVA SECCIÓN EQUIPO - MÓVILES PEQUEÑOS */
+    #team {
+        padding: 3rem 0;
+    }
+    
+    .team-description p {
+        font-size: 1rem;
+        padding: 0 5px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .team-focus h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1.2rem;
+        padding: 0 10px;
+    }
+    
+    .focus-grid {
+        gap: 1rem;
+        padding: 0 10px;
+    }
+    
+    .focus-item {
+        padding: 1.2rem 0.8rem;
+        min-height: 220px;
+    }
+    
+    .focus-icon {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+        height: 40px;
+    }
+    
+    .focus-item h4 {
+        font-size: 1rem;
+        min-height: 40px;
+        margin-bottom: 0.6rem;
+        line-height: 1.3;
+    }
+    
+    .focus-item p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+}
+
+/* Para tablets (pantallas medianas) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    /* NUEVA SECCIÓN EQUIPO - TABLETS */
+    .focus-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .focus-item {
+        min-height: 260px;
+    }
+    
+    .focus-icon {
+        font-size: 2.2rem;
+    }
+    
+    .focus-item h4 {
+        font-size: 1.1rem;
+        min-height: 50px;
+    }
+    
+    .focus-item p {
+        font-size: 0.95rem;
     }
 }
 
