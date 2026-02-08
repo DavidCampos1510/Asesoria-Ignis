@@ -371,48 +371,54 @@ header {
 
 /* BOTÓN CONSULTA GRATUITA */
 .nav-menu a[href="#contact"].btn.btn-primary {
-    background: linear-gradient(135deg, #0c2a4d 0%, #0a2342 100%);
+    background: linear-gradient(135deg, #d4af37 0%, #c19c2e 100%);
     border: none;
 }
 
 .nav-menu a[href="#contact"].btn.btn-primary:hover {
-    background: linear-gradient(135deg, #0a2342 0%, #081c36 100%);
+    background: linear-gradient(135deg, #c19c2e 0%, #b08c25 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* =========================================================
-   DISEÑO MEJORADO - MENÚ HAMBURGUESA MODERNO
+   CORRECCIÓN CRÍTICA: BOTÓN HAMBURGUESA SIEMPRE VISIBLE EN MÓVIL
    ========================================================= */
 
-/* HAMBURGUESA ANIMADA ELEGANTE */
+/* HAMBURGUESA ANIMADA ELEGANTE - POSICIÓN FIJA */
 .hamburger {
     display: none;
     cursor: pointer;
     flex-direction: column;
     justify-content: space-between;
-    width: 30px;
-    height: 24px;
-    position: relative;
-    z-index: 10001;
-    background: transparent;
-    border: none;
-    padding: 0;
-    margin-left: 20px;
+    width: 40px; /* Más grande para fácil tapping */
+    height: 40px;
+    position: fixed !important; /* FIJO EN LA PANTALLA */
+    top: 15px !important; /* Posición fija desde arriba */
+    right: 15px !important; /* Posición fija desde la derecha */
+    z-index: 10001 !important; /* Por encima de todo */
+    background: transparent !important;
+    border: none !important;
+    padding: 8px !important; /* Más área de clic */
+    margin: 0 !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .bar {
-    width: 100%;
-    height: 3px;
-    background-color: var(--primary-blue);
+    width: 24px !important;
+    height: 3px !important;
+    background-color: var(--primary-blue) !important;
     border-radius: 2px;
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     transform-origin: center;
+    margin: 3px 0 !important; /* Espacio entre barras */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Mejor visibilidad */
 }
 
 /* Animación elegante al activar */
 .hamburger.active .bar:nth-child(1) {
-    transform: translateY(10.5px) rotate(45deg);
+    transform: translateY(8px) rotate(45deg);
     background-color: var(--primary-blue);
 }
 
@@ -422,9 +428,175 @@ header {
 }
 
 .hamburger.active .bar:nth-child(3) {
-    transform: translateY(-10.5px) rotate(-45deg);
+    transform: translateY(-8px) rotate(-45deg);
     background-color: var(--primary-blue);
 }
+
+/* =========================================================
+   FIX: HEADER MÓVIL COMPACTO Y VISIBLE
+   ========================================================= */
+@media (max-width: 920px) {
+    /* HEADER COMPACTO - ALTURA FIJA */
+    header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 56px !important; /* ALTURA FIJA */
+        min-height: 56px !important;
+        background: var(--white) !important;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1) !important;
+        z-index: 10000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    /* NAVBAR ALINEADO CORRECTAMENTE */
+    .navbar {
+        width: 100% !important;
+        height: 56px !important;
+        min-height: 56px !important;
+        padding: 0 15px !important;
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        position: relative !important;
+    }
+
+    /* LOGO POSICIONADO FIJO A LA IZQUIERDA */
+    .logo {
+        position: absolute !important;
+        left: 15px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        z-index: 10001 !important;
+        color: var(--primary-blue) !important;
+        font-weight: 700 !important;
+        font-size: 1.1rem !important;
+        min-width: auto !important;
+        max-width: 70% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    /* BOTÓN HAMBURGUESA SIEMPRE VISIBLE */
+    .hamburger {
+        display: flex !important;
+        position: fixed !important;
+        top: 12px !important; /* Ajustado para centrar en header de 56px */
+        right: 15px !important;
+        z-index: 10002 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+
+    /* AJUSTAR PADDING DEL BODY PARA HEADER FIJO */
+    body {
+        padding-top: 56px !important;
+        overflow-x: hidden !important;
+        width: 100% !important;
+    }
+
+    /* ELIMINAR CUALQUIER EFECTO DE SCROLL EN HEADER MÓVIL */
+    header.header-scrolled {
+        background-color: var(--white) !important;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1) !important;
+        height: 56px !important;
+    }
+
+    /* MENÚ MÓVIL - POSICIÓN CORRECTA */
+    .nav-menu {
+        position: fixed !important;
+        top: 0 !important;
+        right: -100% !important;
+        width: 320px !important;
+        max-width: 85% !important;
+        height: 100vh !important;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1) !important;
+        z-index: 9999 !important;
+        padding: 80px 30px 40px !important; /* Más espacio arriba para header */
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+        transition: right 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        pointer-events: auto !important;
+    }
+
+    .nav-menu.active {
+        right: 0 !important;
+    }
+
+    /* OVERLAY DE FONDO AL ABRIR MENÚ */
+    .menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(10, 36, 99, 0.85);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 9998;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+
+    .menu-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+
+    /* ENCABEZADO DEL MENÚ MÓVIL */
+    .mobile-menu-header {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 56px !important;
+        padding: 0 30px !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        background: var(--white) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05) !important;
+        z-index: 10002 !important;
+    }
+
+    /* PREVENIR SCROLL HORIZONTAL */
+    html, body {
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        position: relative !important;
+    }
+
+    /* DESACTIVAR SCROLL CUANDO MENÚ ESTÁ ABIERTO */
+    body.menu-open {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
+/* =========================================================
+   DISEÑO MEJORADO - MENÚ HAMBURGUESA MODERNO
+   ========================================================= */
 
 /* OVERLAY DE FONDO AL ABRIR MENÚ */
 .menu-overlay {
@@ -451,64 +623,6 @@ header {
    PANEL DEL MENÚ MÓVIL MODERNO
    ========================================================= */
 @media (max-width: 920px) {
-    .hamburger {
-        display: flex;
-    }
-
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 320px;
-        height: 100vh;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
-        z-index: 9999;
-        padding: 100px 40px 40px;
-        display: flex;
-        flex-direction: column;
-        gap: 0;
-        transition: right 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .nav-menu.active {
-        right: 0;
-    }
-
-    /* ENCABEZADO DEL MENÚ MÓVIL */
-    .mobile-menu-header {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        padding: 25px 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: var(--white);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        z-index: 1;
-    }
-
-    .mobile-logo {
-        font-family: 'Playfair Display', serif;
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: var(--primary-blue);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .mobile-logo i {
-        color: var(--accent-gold);
-        font-size: 1.2rem;
-    }
-
     /* LISTA DE ENLACES ELEGANTE */
     .nav-menu ul {
         width: 100%;
@@ -738,43 +852,6 @@ header {
         background: var(--accent-gold);
         color: var(--white);
         transform: translateY(-3px);
-    }
-
-    /* HEADER FIJO EN MÓVIL - COMPACTO */
-    header {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        background: var(--white) !important;
-        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-        z-index: 10000 !important;
-        padding: 3px 0 !important; /* REDUCIDO */
-    }
-
-    .navbar {
-        padding: 0;
-        min-height: 50px !important; /* ALTURA REDUCIDA EN MÓVIL */
-    }
-
-    body.menu-open {
-        overflow: hidden;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-    }
-
-    /* Ajustar body padding para móvil */
-    body {
-        padding-top: 56px !important;
-    }
-
-    /* Asegurar que el logo sea visible */
-    .logo {
-        color: var(--primary-blue) !important;
-        font-weight: 700;
-        z-index: 10001;
-        font-size: 1rem;
     }
 }
 
@@ -1748,13 +1825,23 @@ footer a:hover {
         font-size: 1rem;
     }
     
+    /* BOTÓN HAMBURGUESA AÚN MÁS ACCESIBLE */
+    .hamburger {
+        top: 10px !important;
+        right: 10px !important;
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
     .nav-menu {
-        width: 100%;
-        padding: 90px 25px 25px;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 70px 20px 20px !important;
     }
 
     .mobile-menu-header {
-        padding: 20px 25px;
+        padding: 15px 20px !important;
+        height: 50px !important;
     }
 
     .nav-menu a {
@@ -1866,6 +1953,11 @@ footer a:hover {
     header.header-scrolled .nav-menu a::after {
         background-color: var(--accent-gold);
     }
+    
+    /* En desktop, el botón hamburguesa debe estar oculto */
+    .hamburger {
+        display: none !important;
+    }
 }
 
 /* Mejoras de usabilidad para menú móvil */
@@ -1971,7 +2063,7 @@ footer a:hover {
     header.header-scrolled .nav-menu,
     header.header-scrolled .nav-menu.active {
         background-color: var(--white) !important;
-        top: 56px; /* AJUSTADO */
+        top: 56px !important; /* AJUSTADO */
     }
     
     .nav-menu a,
