@@ -1863,23 +1863,44 @@ footer a:hover {
   }
 }
 /* =========================================================
-   FIX – Mostrar siempre el botón "Consulta gratuita"
+   FIX DEFINITIVO – BOTÓN "CONSULTA GRATUITA" EN MENÚ MÓVIL
    ========================================================= */
 
 @media (max-width: 920px) {
 
-  .nav-menu {
-    padding-bottom: 120px; /* espacio extra para el botón */
+  /* Asegurar que TODOS los li se vean */
+  .nav-menu li {
+    display: block !important;
+    width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
-  .nav-menu .btn-primary {
+  /* Forzar visibilidad del botón */
+  .nav-menu .btn-primary,
+  .nav-menu a.btn-primary,
+  .nav-menu li .btn-primary {
     display: flex !important;
-    width: 100%;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    visibility: visible !important;
+    opacity: 1 !important;
+
+    width: 100% !important;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
+
     justify-content: center;
     align-items: center;
-    font-size: 1rem;
+
+    background-color: var(--accent-gold) !important;
+    color: var(--primary-blue) !important;
+
+    position: relative !important;
+    z-index: 10005 !important;
   }
 
+  /* Asegurar que el menú permita scroll hasta el final */
+  .nav-menu {
+    overflow-y: auto !important;
+    padding-bottom: 180px !important;
+  }
 }
