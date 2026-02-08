@@ -1862,3 +1862,24 @@ footer a:hover {
     pointer-events: none !important;
   }
 }
+/* =========================================================
+   FIX – Mostrar siempre el botón "Consulta gratuita"
+   ========================================================= */
+
+@media (max-width: 920px) {
+
+  .nav-menu {
+    padding-bottom: 120px; /* espacio extra para el botón */
+  }
+
+  .nav-menu .btn-primary {
+    display: flex !important;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+  }
+
+}
