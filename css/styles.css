@@ -170,7 +170,9 @@ section {
     text-align: center;
 }
 
-/* Preloader */
+/* =========================================================
+   PRELOADER
+   ========================================================= */
 #preloader {
     position: fixed;
     top: 0;
@@ -199,11 +201,11 @@ section {
     100% { transform: rotate(360deg); }
 }
 
-/* Header y Navegación */
-/* -------------------------------- */
-/*            HEADER                */
-/* -------------------------------- */
+/* =========================================================
+   HEADER Y NAVEGACIÓN MEJORADA
+   ========================================================= */
 
+/* Header principal */
 header {
     position: fixed;
     top: 0;
@@ -236,10 +238,7 @@ header {
     }
 }
 
-/* -------------------------------- */
-/*             NAVBAR               */
-/* -------------------------------- */
-
+/* Navbar contenedor */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -247,10 +246,7 @@ header {
     padding: 1.5rem 0;
 }
 
-/* -------------------------------- */
-/*               LOGO               */
-/* -------------------------------- */
-
+/* Logo */
 .logo {
     font-family: 'Inter', sans-serif;
     font-size: 1.1rem;
@@ -294,10 +290,7 @@ header {
     font-size: 0.8rem;
 }
 
-/* -------------------------------- */
-/*          MENÚ ESCRITORIO         */
-/* -------------------------------- */
-
+/* Menú escritorio */
 .nav-menu {
     display: flex;
     align-items: center;
@@ -335,43 +328,390 @@ header {
     width: 100%;
 }
 
-/* -------------------------------- */
-/*          MENÚ HAMBURGUESA        */
-/* -------------------------------- */
+/* =========================================================
+   DISEÑO MEJORADO - MENÚ HAMBURGUESA MODERNO
+   ========================================================= */
 
+/* HAMBURGUESA ANIMADA ELEGANTE */
 .hamburger {
     display: none;
     cursor: pointer;
     flex-direction: column;
     justify-content: space-between;
     width: 30px;
-    height: 21px;
+    height: 24px;
+    position: relative;
+    z-index: 10001;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-left: 20px;
 }
 
 .bar {
     width: 100%;
     height: 3px;
     background-color: var(--primary-blue);
-    transition: var(--transition);
+    border-radius: 2px;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform-origin: center;
 }
 
-/* Hamburguesa animada cuando está activa */
+/* Animación elegante al activar */
 .hamburger.active .bar:nth-child(1) {
-    transform: rotate(45deg) translate(6px, 6px);
+    transform: translateY(10.5px) rotate(45deg);
+    background-color: var(--primary-blue);
 }
 
 .hamburger.active .bar:nth-child(2) {
     opacity: 0;
+    transform: scaleX(0);
 }
 
 .hamburger.active .bar:nth-child(3) {
-    transform: rotate(-45deg) translate(6px, -6px);
+    transform: translateY(-10.5px) rotate(-45deg);
+    background-color: var(--primary-blue);
 }
 
-/* -------------------------------- */
-/* RESPONSIVE                       */
-/* -------------------------------- */
+/* OVERLAY DE FONDO AL ABRIR MENÚ */
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 36, 99, 0.85);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
 
+.menu-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* =========================================================
+   PANEL DEL MENÚ MÓVIL MODERNO
+   ========================================================= */
+@media (max-width: 920px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 320px;
+        height: 100vh;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.95) 100%);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+        padding: 100px 40px 40px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        transition: right 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-menu.active {
+        right: 0;
+    }
+
+    /* ENCABEZADO DEL MENÚ MÓVIL */
+    .mobile-menu-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 25px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--white);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        z-index: 1;
+    }
+
+    .mobile-logo {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--primary-blue);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .mobile-logo i {
+        color: var(--accent-gold);
+        font-size: 1.2rem;
+    }
+
+    /* LISTA DE ENLACES ELEGANTE */
+    .nav-menu ul {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .nav-menu li {
+        margin: 0;
+        width: 100%;
+        opacity: 0;
+        transform: translateX(30px);
+        transition: all 0.4s ease;
+        transition-delay: calc(var(--i) * 0.1s);
+    }
+
+    .nav-menu.active li {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .nav-menu li:nth-child(1) { --i: 1; }
+    .nav-menu li:nth-child(2) { --i: 2; }
+    .nav-menu li:nth-child(3) { --i: 3; }
+    .nav-menu li:nth-child(4) { --i: 4; }
+    .nav-menu li:nth-child(5) { --i: 5; }
+    .nav-menu li:nth-child(6) { --i: 6; }
+    .nav-menu li:nth-child(7) { --i: 7; }
+
+    /* ENLACES ESTILIZADOS */
+    .nav-menu a {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px 0;
+        color: var(--primary-blue);
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-decoration: none;
+        border-bottom: 1px solid rgba(10, 36, 99, 0.08);
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .nav-menu li:last-child a {
+        border-bottom: none;
+    }
+
+    .nav-menu a i {
+        color: var(--accent-gold);
+        font-size: 1.2rem;
+        width: 24px;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+        color: var(--accent-gold);
+        padding-left: 10px;
+    }
+
+    .nav-menu a:hover i {
+        transform: scale(1.2);
+    }
+
+    .nav-menu a::after {
+        content: '';
+        position: absolute;
+        left: -40px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 0;
+        background: var(--accent-gold);
+        border-radius: 0 2px 2px 0;
+        transition: height 0.3s ease;
+    }
+
+    .nav-menu a:hover::after {
+        height: 40%;
+    }
+
+    /* BOTÓN "RESERVAR HORA" DESTACADO */
+    .nav-menu .btn-primary {
+        margin-top: 30px;
+        padding: 16px 28px;
+        background: linear-gradient(135deg, var(--accent-gold) 0%, #c19c2e 100%);
+        color: var(--primary-blue) !important;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        text-align: center;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+
+    .nav-menu .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #c19c2e 0%, var(--accent-gold) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+    }
+
+    .nav-menu .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.35);
+    }
+
+    .nav-menu .btn-primary:hover::before {
+        opacity: 1;
+    }
+
+    .nav-menu .btn-primary i {
+        color: var(--primary-blue);
+        font-size: 1.2rem;
+    }
+
+    /* BOTÓN DE CERRAR ESTILIZADO */
+    .close-menu {
+        background: none;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .close-menu:hover {
+        background: rgba(10, 36, 99, 0.1);
+        transform: rotate(90deg);
+    }
+
+    .close-menu span {
+        position: absolute;
+        width: 20px;
+        height: 2px;
+        background: var(--primary-blue);
+        border-radius: 1px;
+    }
+
+    .close-menu span:first-child {
+        transform: rotate(45deg);
+    }
+
+    .close-menu span:last-child {
+        transform: rotate(-45deg);
+    }
+
+    /* FOOTER DEL MENÚ MÓVIL */
+    .mobile-menu-footer {
+        margin-top: auto;
+        padding-top: 30px;
+        border-top: 1px solid rgba(10, 36, 99, 0.1);
+        text-align: center;
+    }
+
+    .mobile-contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .mobile-contact-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+
+    .mobile-contact-item i {
+        color: var(--accent-gold);
+        font-size: 1rem;
+    }
+
+    .mobile-social-links {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .mobile-social-links a {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(10, 36, 99, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-blue);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .mobile-social-links a:hover {
+        background: var(--accent-gold);
+        color: var(--white);
+        transform: translateY(-3px);
+    }
+
+    /* HEADER FIJO EN MÓVIL */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--white) !important;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        z-index: 10000 !important;
+        padding: 15px 0;
+    }
+
+    .navbar {
+        padding: 0;
+    }
+
+    body.menu-open {
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Asegurar que el logo sea visible */
+    .logo {
+        color: var(--primary-blue) !important;
+        font-weight: 700;
+        z-index: 10001;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE PARA LOGO Y MENÚ DESKTOP
+   ========================================================= */
 @media (max-width: 1200px) {
     .logo-content {
         flex-direction: column;
@@ -396,65 +736,6 @@ header {
 }
 
 @media (max-width: 920px) {
-    .hamburger {
-        display: flex;
-        z-index: 10001;
-    }
-
-    .nav-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        background: var(--white);
-        width: 280px;
-        height: 100vh;
-        flex-direction: column;
-        padding: 100px 30px 30px;
-        gap: 20px;
-        box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
-        transition: right 0.4s ease;
-        z-index: 10000;
-        overflow-y: auto;
-        align-items: flex-start;
-    }
-
-    .nav-menu.active {
-        right: 0;
-    }
-
-    .nav-menu li {
-        margin: 0;
-        width: 100%;
-    }
-
-    .nav-menu a {
-        display: block;
-        padding: 12px 0;
-        border-bottom: 1px solid #eee;
-        width: 100%;
-        font-size: 1.1rem;
-        color: var(--primary-blue) !important;
-        font-weight: 500;
-    }
-
-    .nav-menu a::after {
-        display: none;
-    }
-
-    .nav-menu .btn-primary {
-        margin-top: 10px;
-        width: 100%;
-        text-align: center;
-        justify-content: center;
-        color: var(--primary-blue) !important;
-        background-color: var(--accent-gold) !important;
-    }
-    
-    .nav-menu .btn-primary:hover {
-        background-color: #c39d2f !important;
-        color: var(--primary-blue) !important;
-    }
-    
     /* El menú móvil siempre debe mantener sus colores */
     .nav-menu,
     .nav-menu.active {
@@ -472,34 +753,37 @@ header {
     }
 }
 
-@media (max-width: 768px) {
-    .logo-main {
-        font-size: 1.3rem;
-    }
+/* SCROLLBAR PERSONALIZADO */
+.nav-menu::-webkit-scrollbar {
+    width: 4px;
+}
 
-    .logo-text-line {
-        display: none;
+.nav-menu::-webkit-scrollbar-track {
+    background: rgba(10, 36, 99, 0.05);
+}
+
+.nav-menu::-webkit-scrollbar-thumb {
+    background: var(--accent-gold);
+    border-radius: 2px;
+}
+
+/* EFECTO DE CIERRE SUAVE */
+.nav-menu.closing {
+    animation: slideOutRight 0.4s cubic-bezier(0.77, 0.2, 0.05, 1.0) forwards;
+}
+
+@keyframes slideOutRight {
+    from {
+        right: 0;
+    }
+    to {
+        right: -100%;
     }
 }
 
-/* SOLUCIÓN 1 IMPLEMENTADA: Ajustes para el botón en pantallas pequeñas */
-@media (max-width: 1100px) {
-    .nav-menu .btn.btn-primary {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 920px) {
-    .nav-menu .btn.btn-primary {
-        white-space: normal;
-        text-align: center;
-        width: 100%;
-        margin-top: 10px;
-    }
-}
-
-/* Hero Section */
+/* =========================================================
+   HERO SECTION
+   ========================================================= */
 .hero {
     height: 100vh;
     background: linear-gradient(rgba(10, 36, 99, 0.7), rgba(10, 36, 99, 0.7)), url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
@@ -537,7 +821,9 @@ header {
     flex-wrap: wrap;
 }
 
-/* Servicios Section */
+/* =========================================================
+   SERVICIOS SECTION
+   ========================================================= */
 .services-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -594,7 +880,9 @@ header {
     }
 }
 
-/* Por Qué Elegirnos Section */
+/* =========================================================
+   POR QUÉ ELEGIRNOS SECTION
+   ========================================================= */
 .why-us-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -699,7 +987,9 @@ header {
     animation-delay: 1.4s;
 }
 
-/* Testimonios Section */
+/* =========================================================
+   TESTIMONIOS SECTION
+   ========================================================= */
 .testimonials-container {
     position: relative;
     overflow: hidden;
@@ -725,15 +1015,6 @@ header {
     background: #fff;
     border-radius: 10px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-}
-
-@keyframes scrollContinuo {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
 }
 
 .client-photo {
@@ -765,17 +1046,29 @@ header {
     display: none;
 }
 
-/* Animación continua */
-@keyframes deslizar {
-    from {
-        transform: translateX(0);
-    }
-    to {
-        transform: translateX(-50%);
-    }
+/* Estilos para el icono del cliente en testimonios */
+.client-icon {
+    font-size: 3.5rem;
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+    text-align: center;
 }
 
-/* Equipo Section */
+/* Ajuste para mantener la alineación sin fotos */
+.testimonial {
+    text-align: center;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* =========================================================
+   EQUIPO SECTION
+   ========================================================= */
 .team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -810,7 +1103,9 @@ header {
     margin-bottom: 1rem;
 }
 
-/* Contacto Section */
+/* =========================================================
+   CONTACTO SECTION
+   ========================================================= */
 .contact-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -899,7 +1194,9 @@ textarea.form-control {
     border: none;
 }
 
-/* Footer */
+/* =========================================================
+   FOOTER
+   ========================================================= */
 footer {
     width: 100%;
     background-color: #092155;
@@ -986,19 +1283,9 @@ footer a:hover {
     color: #b5c3e0;
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .social-links a {
-        margin: 8px;
-    }
-}
-
-/* Botón de WhatsApp */
+/* =========================================================
+   BOTÓN DE WHATSAPP
+   ========================================================= */
 .whatsapp-float {
     position: fixed;
     bottom: 25px;
@@ -1034,7 +1321,9 @@ footer a:hover {
     }
 }
 
-/* Botón volver arriba */
+/* =========================================================
+   BOTÓN VOLVER ARRIBA
+   ========================================================= */
 .back-to-top {
     position: fixed;
     bottom: 20px;
@@ -1065,128 +1354,9 @@ footer a:hover {
     color: var(--primary-blue);
 }
 
-/* Modal de confirmación */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-    opacity: 0;
-    visibility: hidden;
-    transition: var(--transition);
-}
-
-.modal.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-content {
-    background-color: var(--white);
-    padding: 2.5rem;
-    border-radius: var(--border-radius);
-    max-width: 500px;
-    width: 90%;
-    text-align: center;
-    position: relative;
-    transform: translateY(20px);
-    transition: transform 0.3s ease;
-}
-
-.modal.active .modal-content {
-    transform: translateY(0);
-}
-
-.modal-icon {
-    font-size: 3rem;
-    color: var(--accent-gold);
-    margin-bottom: 1rem;
-}
-
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: var(--text-color);
-}
-
-/* Estilos para el formulario mejorado */
-.loading {
-    position: relative;
-    pointer-events: none;
-}
-
-.loading::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    margin: -10px 0 0 -10px;
-    border: 2px solid #f3f3f3;
-    border-top: 2px solid var(--accent-gold);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-.error-message {
-    color: #e74c3c;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    display: none;
-}
-
-.error-message.show {
-    display: block;
-}
-
-.form-control.error {
-    border-color: #e74c3c;
-}
-
-.success-message {
-    background-color: #d4edda;
-    color: #155724;
-    padding: 1rem;
-    border-radius: var(--border-radius);
-    margin-bottom: 1rem;
-    display: none;
-    border: 1px solid #c3e6cb;
-}
-
-.success-message.show {
-    display: block;
-}
-
-.instructions {
-    background-color: #e7f3ff;
-    border: 1px solid #b3d9ff;
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
-}
-
-.instructions h4 {
-    color: var(--primary-blue);
-    margin-bottom: 0.5rem;
-}
-
-/* -------------------------------------------------------- */
-/*              ESTILOS PARA PREGUNTAS FRECUENTES           */
-/* -------------------------------------------------------- */
-
+/* =========================================================
+   ESTILOS PARA PREGUNTAS FRECUENTES
+   ========================================================= */
 #faq {
     padding: 5rem 0;
 }
@@ -1236,9 +1406,9 @@ footer a:hover {
     margin: 0;
 }
 
-/* ================================
+/* =========================================================
    ESTILOS PARA LA SECCIÓN CALENDLY
-   ================================ */
+   ========================================================= */
 
 /* SECCIÓN CALENDLY LISTA PARA OCUPAR TODA LA PANTALLA */
 #calendlySection {
@@ -1301,25 +1471,233 @@ footer a:hover {
     background: #0e355f;
 }
 
-/* HEADER FIJO */
-#header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 9999;
-    background: white;
-    transition: box-shadow 0.3s ease;
+/* =========================================================
+   MEJORAS RESPONSIVE GENERALES
+   ========================================================= */
+
+/* Para pantallas pequeñas */
+@media (max-width: 768px) {
+    /* GENERAL */
+    body {
+        padding-top: 70px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+    
+    h3 {
+        font-size: 1.3rem;
+    }
+    
+    section {
+        padding: 3rem 0;
+    }
+    
+    /* HERO */
+    .hero {
+        padding-top: 70px;
+        margin-top: -70px;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+        padding: 0 15px;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+        padding: 0 20px;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    /* CONTENIDO */
+    .service-card, .testimonial, .contact-form {
+        padding: 1.5rem;
+    }
+    
+    /* FAQ */
+    .faq-question {
+        font-size: 1rem;
+        padding: 1rem;
+    }
+    
+    .faq-answer {
+        padding: 1rem;
+    }
+    
+    /* EQUIPO */
+    .team-member {
+        margin-bottom: 2rem;
+    }
+    
+    .member-photo {
+        height: 250px;
+    }
+    
+    /* BOTONES FLOTANTES */
+    .back-to-top {
+        left: 15px;
+        bottom: 80px;
+        width: 45px;
+        height: 45px;
+    }
+    
+    .whatsapp-float {
+        width: 55px;
+        height: 55px;
+        font-size: 1.6rem;
+        bottom: 90px;
+        right: 20px;
+    }
+    
+    /* STATS */
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .stat-item {
+        padding: 1rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+    
+    /* TESTIMONIOS */
+    .client-icon {
+        font-size: 3rem;
+    }
+    
+    /* FORMULARIO */
+    .contact-form {
+        padding: 1.5rem;
+    }
+    
+    .form-control {
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+    
+    input, textarea, select {
+        font-size: 16px !important; /* Previene zoom automático en iOS */
+    }
+    
+    .checkbox-group label {
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+    
+    .contact-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    /* CALENDLY */
+    #calendlySection {
+        padding-top: 70px;
+        min-height: calc(100vh - 70px);
+    }
+    
+    .reservar-title {
+        font-size: 1.5rem;
+        padding: 15px 15px 5px;
+    }
+    
+    .calendly-container {
+        padding: 5px;
+    }
+    
+    .calendly-inline-widget {
+        min-height: 600px !important;
+    }
+    
+    .btn-volver-calendly {
+        margin: 15px auto;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
 }
 
-/* Sombra cuando el usuario baja */
-#header.sticky {
-    box-shadow: 0 3px 15px rgba(0,0,0,0.12);
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.6rem;
+    }
+    
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .logo {
+        font-size: 1rem;
+    }
+    
+    .nav-menu {
+        width: 100%;
+        padding: 90px 25px 25px;
+    }
+
+    .mobile-menu-header {
+        padding: 20px 25px;
+    }
+
+    .nav-menu a {
+        font-size: 1rem;
+        padding: 16px 0;
+    }
+
+    .nav-menu .btn-primary {
+        padding: 14px 24px;
+        font-size: 1rem;
+    }
+    
+    .services-grid {
+        gap: 1rem;
+    }
+    
+    .service-card {
+        padding: 1.2rem;
+    }
+    
+    .testimonial {
+        padding: 1.5rem;
+    }
+    
+    .client-icon {
+        font-size: 2.5rem;
+    }
+    
+    .client-photo {
+        width: 70px;
+        height: 70px;
+    }
 }
 
-/* ===========================
+/* =========================================================
    HEADER ORIGINAL RESTAURADO
-   ===========================*/
-
+   ========================================================= */
 #header {
     width: 100%;
     position: fixed;
@@ -1369,203 +1747,9 @@ footer a:hover {
     opacity: 0.85;
 }
 
-/* MEJORAS PARA FORMULARIO EN MÓVIL */
-@media (max-width: 768px) {
-    .contact-form {
-        padding: 1.5rem;
-    }
-    
-    .form-control {
-        font-size: 16px; /* Evita zoom en iOS */
-    }
-    
-    input, textarea, select {
-        font-size: 16px !important; /* Previene zoom automático en iOS */
-    }
-    
-    .checkbox-group label {
-        font-size: 0.85rem;
-        line-height: 1.4;
-    }
-    
-    .contact-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-}
-
-/* MEJORAS PARA CALENDLY EN MÓVIL */
-@media (max-width: 768px) {
-    #calendlySection {
-        padding-top: 70px;
-        min-height: calc(100vh - 70px);
-    }
-    
-    .reservar-title {
-        font-size: 1.5rem;
-        padding: 15px 15px 5px;
-    }
-    
-    .calendly-container {
-        padding: 5px;
-    }
-    
-    .calendly-inline-widget {
-        min-height: 600px !important;
-    }
-    
-    .btn-volver-calendly {
-        margin: 15px auto;
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    }
-}
-
-/* MEJORAS GENERALES PARA MÓVIL */
-@media (max-width: 768px) {
-    body {
-        padding-top: 70px;
-    }
-    
-    h1 {
-        font-size: 2rem;
-    }
-    
-    h2 {
-        font-size: 1.8rem;
-        margin-bottom: 2rem;
-    }
-    
-    h3 {
-        font-size: 1.3rem;
-    }
-    
-    section {
-        padding: 3rem 0;
-    }
-    
-    .hero {
-        padding-top: 70px;
-        margin-top: -70px;
-        height: auto;
-        min-height: 100vh;
-    }
-    
-    .hero h1 {
-        font-size: 2.2rem;
-    }
-    
-    .hero p {
-        font-size: 1rem;
-        padding: 0 15px;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-        gap: 15px;
-        padding: 0 20px;
-    }
-    
-    .hero-buttons .btn {
-        width: 100%;
-        max-width: 300px;
-        margin: 0 auto;
-    }
-    
-    .service-card, .testimonial, .contact-form {
-        padding: 1.5rem;
-    }
-    
-    .faq-question {
-        font-size: 1rem;
-        padding: 1rem;
-    }
-    
-    .faq-answer {
-        padding: 1rem;
-    }
-    
-    .team-member {
-        margin-bottom: 2rem;
-    }
-    
-    .member-photo {
-        height: 250px;
-    }
-    
-    .back-to-top {
-        left: 15px;
-        bottom: 80px;
-        width: 45px;
-        height: 45px;
-    }
-    
-    .whatsapp-float {
-        width: 55px;
-        height: 55px;
-        font-size: 1.6rem;
-        bottom: 90px;
-        right: 20px;
-    }
-    
-    .stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-    }
-    
-    .stat-item {
-        padding: 1rem;
-    }
-    
-    .stat-number {
-        font-size: 2rem;
-    }
-}
-
-/* Para pantallas muy pequeñas */
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.8rem;
-    }
-    
-    h2 {
-        font-size: 1.6rem;
-    }
-    
-    .hero h1 {
-        font-size: 1.8rem;
-    }
-    
-    .logo {
-        font-size: 1rem;
-    }
-    
-    .nav-menu {
-        width: 250px;
-        padding: 80px 20px 20px;
-    }
-    
-    .services-grid {
-        gap: 1rem;
-    }
-    
-    .service-card {
-        padding: 1.2rem;
-    }
-    
-    .testimonial {
-        padding: 1.5rem;
-    }
-    
-    .client-photo {
-        width: 70px;
-        height: 70px;
-    }
-}
-
-/* ============================================= */
-/* CORRECCIONES ESPECÍFICAS PARA MENÚ MÓVIL      */
-/* ============================================= */
+/* =========================================================
+   CORRECCIONES ESPECÍFICAS PARA MÓVIL
+   ========================================================= */
 
 /* En móvil, desactivar completamente el efecto header-scrolled */
 @media (max-width: 920px) {
@@ -1781,126 +1965,258 @@ footer a:hover {
     }
 }
 
-/* Estilos para el icono del cliente en testimonios */
-.client-icon {
-    font-size: 3.5rem;
+/* =========================================================
+   FIX DEFINITIVO – MENÚ MÓVIL CLICKEABLE
+   ========================================================= */
+@media (max-width: 920px) {
+    /* Asegurar orden de capas correcto */
+    header,
+    #header {
+        z-index: 9999 !important;
+    }
+
+    .hamburger {
+        z-index: 10001 !important;
+    }
+
+    /* Menú siempre por encima y recibiendo eventos */
+    .nav-menu {
+        z-index: 10000 !important;
+        pointer-events: auto !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-menu.active {
+        pointer-events: auto !important;
+    }
+
+    /* Links y botones dentro del menú SIEMPRE clickeables */
+    .nav-menu li,
+    .nav-menu a,
+    .nav-menu button,
+    .nav-menu .btn,
+    .nav-menu .btn-primary {
+        pointer-events: auto !important;
+        position: relative;
+        z-index: 10002;
+    }
+
+    /* Por si existe cualquier overlay/pseudo-elemento bloqueando */
+    .nav-menu::before,
+    .nav-menu::after,
+    .nav-menu.active::before,
+    .nav-menu.active::after {
+        pointer-events: none !important;
+    }
+}
+
+/* =========================================================
+   FIX DEFINITIVO – BOTÓN "RESERVAR HORA" EN MENÚ MÓVIL
+   ========================================================= */
+@media (max-width: 920px) {
+    /* Asegurar que TODOS los li se vean */
+    .nav-menu li {
+        display: block !important;
+        width: 100% !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* Forzar visibilidad del botón */
+    .nav-menu .btn-primary,
+    .nav-menu a.btn-primary,
+    .nav-menu li .btn-primary {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+
+        width: 100% !important;
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+
+        justify-content: center;
+        align-items: center;
+
+        background-color: var(--accent-gold) !important;
+        color: var(--primary-blue) !important;
+
+        position: relative !important;
+        z-index: 10005 !important;
+    }
+}
+
+/* =========================================================
+   ANIMACIONES AL SCROLL
+   ========================================================= */
+@keyframes deslizar {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* =========================================================
+   MODAL DE CONFIRMACIÓN
+   ========================================================= */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--white);
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-icon {
+    font-size: 3rem;
     color: var(--accent-gold);
     margin-bottom: 1rem;
-    text-align: center;
 }
 
-/* Ajuste para mantener la alineación sin fotos */
-.testimonial {
-    text-align: center;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
 }
 
-/* Para pantallas pequeñas */
-@media (max-width: 768px) {
-    .client-icon {
-        font-size: 3rem;
-    }
-}
-
-/* Para pantallas muy pequeñas */
-@media (max-width: 480px) {
-    .client-icon {
-        font-size: 2.5rem;
-    }
-}
 /* =========================================================
-   FIX DEFINITIVO – MENÚ MÓVIL CLICKEABLE (Android/iOS)
-   Pegar al FINAL del CSS
+   ESTILOS PARA FORMULARIO MEJORADO
    ========================================================= */
-
-@media (max-width: 920px) {
-
-  /* Asegurar orden de capas correcto */
-  header,
-  #header {
-    z-index: 9999 !important;
-  }
-
-  .hamburger {
-    z-index: 10001 !important;
-  }
-
-  /* Menú siempre por encima y recibiendo eventos */
-  .nav-menu {
-    z-index: 10000 !important;
-    pointer-events: auto !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .nav-menu.active {
-    pointer-events: auto !important;
-  }
-
-  /* Links y botones dentro del menú SIEMPRE clickeables */
-  .nav-menu li,
-  .nav-menu a,
-  .nav-menu button,
-  .nav-menu .btn,
-  .nav-menu .btn-primary {
-    pointer-events: auto !important;
+.loading {
     position: relative;
-    z-index: 10002;
-  }
-
-  /* Por si existe cualquier overlay/pseudo-elemento bloqueando */
-  .nav-menu::before,
-  .nav-menu::after,
-  .nav-menu.active::before,
-  .nav-menu.active::after {
-    pointer-events: none !important;
-  }
+    pointer-events: none;
 }
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--accent-gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+.error-message.show {
+    display: block;
+}
+
+.form-control.error {
+    border-color: #e74c3c;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    display: none;
+    border: 1px solid #c3e6cb;
+}
+
+.success-message.show {
+    display: block;
+}
+
+.instructions {
+    background-color: #e7f3ff;
+    border: 1px solid #b3d9ff;
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.instructions h4 {
+    color: var(--primary-blue);
+    margin-bottom: 0.5rem;
+}
+
 /* =========================================================
-   FIX DEFINITIVO – BOTÓN "CONSULTA GRATUITA" EN MENÚ MÓVIL
+   ANIMACIÓN DE ENTRADA SUAVE
    ========================================================= */
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
 
-@media (max-width: 920px) {
+/* =========================================================
+   FOOTER RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
 
-  /* Asegurar que TODOS los li se vean */
-  .nav-menu li {
-    display: block !important;
-    width: 100% !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
+    .social-links a {
+        margin: 8px;
+    }
+}
 
-  /* Forzar visibilidad del botón */
-  .nav-menu .btn-primary,
-  .nav-menu a.btn-primary,
-  .nav-menu li .btn-primary {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-
-    width: 100% !important;
-    margin-top: 20px !important;
-    margin-bottom: 20px !important;
-
-    justify-content: center;
-    align-items: center;
-
-    background-color: var(--accent-gold) !important;
-    color: var(--primary-blue) !important;
-
-    position: relative !important;
-    z-index: 10005 !important;
-  }
+/* =========================================================
+   Sombra en header al hacer scroll - SOLO PARA DESKTOP
+   ========================================================= */
+#header.sticky {
+    box-shadow: 0 3px 15px rgba(0,0,0,0.12);
+}
 
   /* Asegurar que el menú permita scroll hasta el final */
   .nav-menu {
     overflow-y: auto !important;
     padding-bottom: 180px !important;
   }
-}

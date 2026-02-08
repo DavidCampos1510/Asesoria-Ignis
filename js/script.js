@@ -1,5 +1,5 @@
 // ========== PRELOADER ==========
-window.addEventListener('load', function () {
+window.addEventListener('load', function() {
     const preloader = document.getElementById('preloader');
     if (preloader) {
         preloader.style.opacity = '0';
@@ -12,217 +12,791 @@ window.addEventListener('load', function () {
 });
 
 // ========== VARIABLES GLOBALES ==========
-let hamburger, navMenu, navLinks, header;
+let hamburger, navMenu, menuOverlay, closeMenuBtn, header;
 let contenido, calendly, footer;
 
 // ========== INICIALIZACIÓN ==========
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🔧 Inicializando script con menú hamburguesa mejorado...');
+    
+    // Inicializar variables del menú mejorado
     hamburger = document.querySelector('.hamburger');
     navMenu = document.querySelector('.nav-menu');
-    navLinks = document.querySelectorAll('.nav-menu a');
+    menuOverlay = document.querySelector('.menu-overlay');
+    closeMenuBtn = document.querySelector('.close-menu');
     header = document.getElementById('header');
-
+    
     contenido = document.getElementById('contenidoPrincipal');
     calendly = document.getElementById('calendlySection');
     footer = document.querySelector('footer');
-
-    initMobileMenu();
+    
+    console.log('✅ Elementos encontrados:');
+    console.log('- Hamburger:', !!hamburger);
+    console.log('- NavMenu:', !!navMenu);
+    console.log('- MenuOverlay:', !!menuOverlay);
+    console.log('- CloseMenuBtn:', !!closeMenuBtn);
+    console.log('- Calendly:', !!calendly);
+    console.log('- Contenido:', !!contenido);
+    console.log('- Footer:', !!footer);
+    
+    // Inicializar módulos
+    initMobileMenu();           // Menú hamburguesa mejorado
     initHeaderEffects();
     initBackToTop();
     initWhatsAppButtons();
     initMobileForms();
     initContactForm();
-    initCalendly();
+    initCalendly();            // Calendly mejorado
     initNavigation();
     initFAQ();
     initAnimations();
+    
+    // Forzar carga inicial en móvil
+    if (window.innerWidth <= 920) {
+        initMobileSpecificFeatures();
+    }
+    
+    console.log('🚀 Script inicializado correctamente');
 });
 
-// ========== MENÚ MÓVIL (CORREGIDO) ==========
+// ========== MENÚ HAMBURGUESA MEJORADO ==========
 function initMobileMenu() {
-    if (!hamburger || !navMenu) return;
-
+    if (!hamburger || !navMenu) {
+        console.log('❌ Elementos del menú no encontrados');
+        return;
+    }
+    
+    // Función para abrir menú con animación
     function openMobileMenu() {
         hamburger.classList.add('active');
         navMenu.classList.add('active');
-
-        navMenu.style.pointerEvents = 'auto';
-        navMenu.style.zIndex = '9999';
-
+        if (menuOverlay) {
+            menuOverlay.classList.add('active');
+        }
+        
         document.body.style.overflow = 'hidden';
         document.body.classList.add('menu-open');
+        
+        // Animación de entrada para cada ítem del menú
+        const menuItems = navMenu.querySelectorAll('li');
+        menuItems.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.1}s`;
+            item.style.animationName = 'slideInRight';
+            item.style.animationDuration = '0.4s';
+            item.style.animationFillMode = 'forwards';
+        });
+        
+        console.log('📱 Menú móvil ABIERTO con animaciones');
     }
-
+    
+    // Función para cerrar menú con animación
     function closeMobileMenu() {
         hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-
-        navMenu.style.pointerEvents = '';
-        navMenu.style.zIndex = '';
-
+        
+        // Añadir clase de cierre para animación
+        navMenu.classList.add('closing');
+        if (menuOverlay) {
+            menuOverlay.classList.remove('active');
+        }
+        
         document.body.style.overflow = '';
         document.body.classList.remove('menu-open');
+        
+        // Remover clases después de la animación
+        setTimeout(() => {
+            navMenu.classList.remove('active');
+            navMenu.classList.remove('closing');
+            
+            // Resetear animaciones
+            const menuItems = navMenu.querySelectorAll('li');
+            menuItems.forEach(item => {
+                item.style.animationName = '';
+                item.style.animationDelay = '';
+            });
+        }, 400);
+        
+        console.log('📱 Menú móvil CERRADO con animación');
     }
-
-    hamburger.addEventListener('click', function (e) {
-        e.preventDefault();
+    
+    // Toggle hamburguesa
+    hamburger.addEventListener('click', function(e) {
         e.stopPropagation();
-        navMenu.classList.contains('active') ? closeMobileMenu() : openMobileMenu();
+        e.preventDefault();
+        
+        if (navMenu.classList.contains('active')) {
+            closeMobileMenu();
+        } else {
+            openMobileMenu();
+        }
     });
-
-    // Cerrar al tocar un enlace
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
+    
+    // Botón de cerrar (X)
+    if (closeMenuBtn) {
+        closeMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
             closeMobileMenu();
         });
+    }
+    
+    // Overlay para cerrar
+    if (menuOverlay) {
+        menuOverlay.addEventListener('click', function(e) {
+            if (navMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+    }
+    
+    // Cerrar al hacer clic en enlaces (excepto Calendly)
+    const allMenuLinks = navMenu.querySelectorAll('a');
+    allMenuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Si NO es el botón de Calendly, cerrar menú
+            if (this.id !== 'btnAbrirCalendly') {
+                closeMobileMenu();
+                
+                // Si es enlace interno, hacer scroll después de cerrar
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#') && href !== '#') {
+                    e.preventDefault();
+                    
+                    setTimeout(() => {
+                        const target = document.querySelector(href);
+                        if (target) {
+                            const headerHeight = header ? header.offsetHeight : 80;
+                            const targetPosition = target.offsetTop - headerHeight;
+                            
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }, 500); // Esperar a que el menú se cierre
+                }
+            }
+        });
     });
-
-    // Cerrar tocando fuera
-    document.addEventListener('click', function (e) {
-        if (
-            navMenu.classList.contains('active') &&
-            !navMenu.contains(e.target) &&
-            !hamburger.contains(e.target)
-        ) {
+    
+    // Cerrar con tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
             closeMobileMenu();
         }
     });
+    
+    // Prevenir scroll cuando el menú está abierto
+    navMenu.addEventListener('touchmove', function(e) {
+        if (navMenu.classList.contains('active')) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+    
+    console.log('✅ Menú móvil MEJORADO inicializado');
 }
 
-// ========== NAVEGACIÓN ==========
-function initNavigation() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (!href || href === '#' || this.id === 'btnAbrirCalendly') return;
-
-            const target = document.getElementById(href.substring(1));
-            if (!target) return;
-
+// ========== CALENDLY MEJORADO ==========
+function initCalendly() {
+    // IMPORTANTE: Manejar TODOS los botones con ID 'btnAbrirCalendly'
+    const calendlyButtons = document.querySelectorAll('#btnAbrirCalendly');
+    
+    if (calendlyButtons.length === 0) {
+        console.log('❌ No se encontraron botones de Calendly');
+        return;
+    }
+    
+    console.log(`✅ Encontrados ${calendlyButtons.length} botones de Calendly`);
+    
+    calendlyButtons.forEach((btn, index) => {
+        btn.addEventListener('click', function(e) {
             e.preventDefault();
-
+            e.stopPropagation();
+            
+            console.log(`🎯 Botón Calendly ${index + 1} clickeado`);
+            console.log('📍 Ubicación:', btn.closest('.nav-menu') ? 'Menú móvil' : 'Header desktop');
+            
+            // 1. Cerrar menú móvil si está abierto
+            if (hamburger && navMenu && navMenu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                if (menuOverlay) menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.classList.remove('menu-open');
+                console.log('📱 Menú móvil cerrado antes de abrir Calendly');
+            }
+            
+            // 2. Mostrar Calendly, ocultar contenido y footer
+            if (contenido) {
+                contenido.style.display = 'none';
+                console.log('📦 Contenido principal ocultado');
+            }
+            
+            if (calendly) {
+                calendly.style.display = 'block';
+                console.log('📅 Sección Calendly mostrada');
+            }
+            
+            if (footer) {
+                footer.style.display = 'none';
+                console.log('⬇️ Footer ocultado');
+            }
+            
+            // 3. Scroll al inicio
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // 4. Forzar carga del widget Calendly (especialmente en móviles)
+            setTimeout(() => {
+                const calendlyWidget = document.querySelector('.calendly-inline-widget');
+                if (calendlyWidget) {
+                    // Limpiar contenido anterior
+                    calendlyWidget.innerHTML = '';
+                    
+                    if (typeof Calendly !== 'undefined') {
+                        Calendly.initInlineWidget({
+                            url: 'https://calendly.com/fernanda-herrera-asesorialegalignis/60min',
+                            parentElement: calendlyWidget,
+                            prefill: {},
+                            utm: {}
+                        });
+                        console.log('🔄 Widget Calendly inicializado en móvil');
+                    }
+                }
+            }, 300);
+        });
+    });
+    
+    // Botón volver de Calendly (si existe)
+    const btnCerrarCalendly2 = document.getElementById('btnCerrarCalendly2');
+    if (btnCerrarCalendly2 && calendly && contenido) {
+        btnCerrarCalendly2.addEventListener('click', function() {
+            calendly.style.display = 'none';
+            contenido.style.display = 'block';
+            if (footer) footer.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            console.log('🔙 Calendly cerrado, volviendo al contenido');
+        });
+    }
+    
+    // Cuando se agenda en Calendly
+    window.addEventListener('message', function(e) {
+        if (e.data.event === 'calendly.event_scheduled') {
             if (calendly) calendly.style.display = 'none';
             if (contenido) contenido.style.display = 'block';
             if (footer) footer.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            console.log('✅ Evento agendado, volviendo al inicio');
+        }
+    });
+}
 
-            const offset = header ? header.offsetHeight : 80;
-            const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-
-            window.scrollTo({ top, behavior: 'smooth' });
-            history.pushState(null, null, href);
+// ========== NAVEGACIÓN MEJORADA ==========
+function initNavigation() {
+    // Navegación suave para enlaces internos
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            
+            // Saltar enlaces vacíos o a la misma página
+            if (href === '#' || href === '') return;
+            
+            // Evitar conflicto con btnAbrirCalendly
+            if (this.id === 'btnAbrirCalendly') return;
+            
+            const targetId = href.substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                e.preventDefault();
+                
+                // Cerrar menú móvil si está abierto
+                if (hamburger && navMenu && navMenu.classList.contains('active')) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    if (menuOverlay) menuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                    document.body.classList.remove('menu-open');
+                }
+                
+                // Asegurar que Calendly esté cerrado
+                if (calendly) calendly.style.display = 'none';
+                if (contenido) contenido.style.display = 'block';
+                if (footer) footer.style.display = 'block';
+                
+                // Calcular scroll con offset para header
+                const headerHeight = header ? header.offsetHeight : 80;
+                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                
+                // Scroll suave
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Actualizar URL
+                history.pushState(null, null, href);
+            }
         });
     });
 }
 
-// ========== CALENDLY ==========
-function initCalendly() {
-    const btn = document.getElementById('btnAbrirCalendly');
-    if (!btn || !calendly) return;
-
-    btn.addEventListener('click', function (e) {
-        e.preventDefault();
-
-        document.body.style.overflow = '';
-        document.body.classList.remove('menu-open');
-
-        if (contenido) contenido.style.display = 'none';
-        calendly.style.display = 'block';
-        if (footer) footer.style.display = 'none';
-
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        setTimeout(() => {
-            if (typeof Calendly !== 'undefined') {
-                Calendly.initInlineWidget({
-                    url: 'https://calendly.com/fernanda-herrera-asesorialegalignis/60min',
-                    parentElement: document.querySelector('.calendly-inline-widget')
-                });
-            }
-        }, 100);
-    });
-}
-
-// ========== HEADER ==========
+// ========== HEADER EFFECTS ==========
 function initHeaderEffects() {
     if (!header) return;
-
+    
     function updateHeader() {
-        if (window.innerWidth > 920 && window.scrollY > 100) {
-            header.classList.add('header-scrolled', 'sticky');
+        if (window.innerWidth > 920) {
+            if (window.scrollY > 100) {
+                header.classList.add('header-scrolled', 'sticky');
+            } else {
+                header.classList.remove('header-scrolled', 'sticky');
+            }
         } else {
+            // En móvil, asegurar que no tenga efectos de scroll
             header.classList.remove('header-scrolled', 'sticky');
         }
     }
-
+    
     window.addEventListener('scroll', updateHeader);
-    window.addEventListener('resize', updateHeader);
-    updateHeader();
+    updateHeader(); // Ejecutar al cargar
+    
+    // Responsive - resetear en móvil
+    window.addEventListener('resize', function() {
+        if (window.innerWidth <= 920) {
+            header.classList.remove('header-scrolled', 'sticky');
+        }
+        updateHeader();
+    });
 }
 
 // ========== BACK TO TOP ==========
 function initBackToTop() {
-    const btn = document.querySelector('.back-to-top');
-    if (!btn) return;
-
-    window.addEventListener('scroll', () => {
-        btn.classList.toggle('active', window.scrollY > 300);
+    const backToTop = document.querySelector('.back-to-top');
+    if (!backToTop) return;
+    
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('active', 'show');
+        } else {
+            backToTop.classList.remove('active', 'show');
+        }
     });
-
-    btn.addEventListener('click', e => {
+    
+    backToTop.addEventListener('click', function(e) {
         e.preventDefault();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
 }
 
 // ========== WHATSAPP ==========
 function initWhatsAppButtons() {
     document.querySelectorAll('.whatsapp-float, a[href*="whatsapp"]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.body.style.overflow = '';
-            document.body.classList.remove('menu-open');
+        btn.addEventListener('click', function() {
+            // Cerrar menú móvil si está abierto
+            if (hamburger && navMenu && navMenu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                if (menuOverlay) menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.classList.remove('menu-open');
+            }
         });
     });
 }
 
 // ========== FORMULARIOS MÓVILES ==========
 function initMobileForms() {
-    if (!/Android|iPhone|iPad/i.test(navigator.userAgent)) return;
+    if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) return;
+    
     document.querySelectorAll('select').forEach(select => {
-        select.addEventListener('focus', () => select.style.fontSize = '16px');
-        select.addEventListener('blur', () => select.style.fontSize = '');
+        select.addEventListener('focus', function() {
+            this.style.fontSize = '16px';
+        });
+        
+        select.addEventListener('blur', function() {
+            this.style.fontSize = '';
+        });
     });
+}
+
+// ========== FORMULARIO DE CONTACTO ==========
+function initContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+    
+    // Elementos del formulario
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const phoneInput = document.getElementById('phone');
+    const privacyInput = document.getElementById('privacy');
+    const submitBtn = document.getElementById('submitBtn');
+    const submitText = document.getElementById('submitText');
+    const successMessage = document.getElementById('successMessageBottom');
+    
+    // Ocultar mensaje de éxito al inicio
+    if (successMessage) {
+        successMessage.style.display = 'none';
+    }
+    
+    // Funciones de validación
+    function showError(input, errorElement, message) {
+        if (errorElement) {
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+        if (input) input.classList.add('error');
+    }
+    
+    function hideError(input, errorElement) {
+        if (errorElement) errorElement.style.display = 'none';
+        if (input) input.classList.remove('error');
+    }
+    
+    // Validaciones
+    function validateName() {
+        if (!nameInput || nameInput.value.trim() === '') {
+            showError(nameInput, document.getElementById('nameError'), 'El nombre es obligatorio');
+            return false;
+        }
+        hideError(nameInput, document.getElementById('nameError'));
+        return true;
+    }
+    
+    function validateEmail() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailInput || emailInput.value.trim() === '') {
+            showError(emailInput, document.getElementById('emailError'), 'El email es obligatorio');
+            return false;
+        } else if (!emailRegex.test(emailInput.value)) {
+            showError(emailInput, document.getElementById('emailError'), 'Por favor, introduce un email válido');
+            return false;
+        }
+        hideError(emailInput, document.getElementById('emailError'));
+        return true;
+    }
+    
+    function validatePhone() {
+        const phoneRegex = /^[0-9+\-\s()]{8,}$/;
+        if (!phoneInput || phoneInput.value.trim() === '') {
+            showError(phoneInput, document.getElementById('phoneError'), 'El teléfono es obligatorio');
+            return false;
+        } else if (!phoneRegex.test(phoneInput.value)) {
+            showError(phoneInput, document.getElementById('phoneError'), 'Por favor, introduce un teléfono válido');
+            return false;
+        }
+        hideError(phoneInput, document.getElementById('phoneError'));
+        return true;
+    }
+    
+    function validatePrivacy() {
+        if (!privacyInput || !privacyInput.checked) {
+            showError(privacyInput, document.getElementById('privacyError'), 'Debes aceptar la política de privacidad');
+            return false;
+        }
+        hideError(privacyInput, document.getElementById('privacyError'));
+        return true;
+    }
+    
+    // Eventos en tiempo real
+    if (nameInput) {
+        nameInput.addEventListener('input', () => hideError(nameInput, document.getElementById('nameError')));
+    }
+    if (emailInput) {
+        emailInput.addEventListener('input', () => hideError(emailInput, document.getElementById('emailError')));
+    }
+    if (phoneInput) {
+        phoneInput.addEventListener('input', () => hideError(phoneInput, document.getElementById('phoneError')));
+    }
+    if (privacyInput) {
+        privacyInput.addEventListener('change', validatePrivacy);
+    }
+    
+    // Envío del formulario
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const isNameValid = validateName();
+        const isEmailValid = validateEmail();
+        const isPhoneValid = validatePhone();
+        const isPrivacyValid = validatePrivacy();
+        
+        if (!(isNameValid && isEmailValid && isPhoneValid && isPrivacyValid)) {
+            if (!isNameValid) nameInput.focus();
+            else if (!isEmailValid) emailInput.focus();
+            else if (!isPhoneValid) phoneInput.focus();
+            else if (!isPrivacyValid) privacyInput.focus();
+            return;
+        }
+        
+        // Mostrar estado de carga
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+        if (submitText) submitText.textContent = 'Enviando...';
+        
+        // Crear formulario temporal
+        const tempForm = document.createElement('form');
+        tempForm.method = 'POST';
+        tempForm.action = contactForm.action;
+        tempForm.style.display = 'none';
+        
+        // Copiar valores
+        Array.from(contactForm.elements).forEach(el => {
+            if (el.name && el.type !== 'submit' && el.type !== 'checkbox') {
+                const hiddenInput = document.createElement('input');
+                hiddenInput.type = 'hidden';
+                hiddenInput.name = el.name;
+                hiddenInput.value = el.value;
+                tempForm.appendChild(hiddenInput);
+            }
+        });
+        
+        if (privacyInput && privacyInput.checked) {
+            const privacyHidden = document.createElement('input');
+            privacyHidden.type = 'hidden';
+            privacyHidden.name = 'privacy';
+            privacyHidden.value = 'Aceptado';
+            tempForm.appendChild(privacyHidden);
+        }
+        
+        // Campos de configuración
+        const configFields = {
+            _subject: '🚨 NUEVA CONSULTA LEGAL - Asesoria Legal Ignis',
+            _template: 'table',
+            _captcha: 'false',
+            _autoresponse: '✅ Hemos recibido tu consulta legal. Te contactaremos dentro de 24 horas hábiles. - Asesoria Legal Ignis'
+        };
+        
+        for (const key in configFields) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = key;
+            input.value = configFields[key];
+            tempForm.appendChild(input);
+        }
+        
+        document.body.appendChild(tempForm);
+        
+        // Mostrar mensaje de éxito
+        if (successMessage) {
+            successMessage.style.display = 'block';
+            successMessage.style.opacity = '1';
+        }
+        
+        // Limpiar formulario
+        contactForm.reset();
+        
+        // Enviar formulario
+        setTimeout(() => tempForm.submit(), 150);
+        
+        // Ocultar mensaje después de 5 segundos
+        setTimeout(() => {
+            if (successMessage) {
+                successMessage.style.opacity = '0';
+                setTimeout(() => { successMessage.style.display = 'none'; }, 500);
+            }
+        }, 5000);
+        
+        // Restaurar botón
+        setTimeout(() => {
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
+            if (submitText) submitText.textContent = 'Enviar Mensaje';
+        }, 2000);
+    });
+}
+
+// ========== TESTIMONIOS ==========
+window.addEventListener('load', function() {
+    const slider = document.querySelector('.testimonials-slider');
+    if (!slider) return;
+    
+    const testimonials = [...document.querySelectorAll('.testimonial')];
+    if (testimonials.length === 0) return;
+    
+    testimonials.forEach((t) => {
+        const clone = t.cloneNode(true);
+        slider.appendChild(clone);
+    });
+    
+    let offset = 0;
+    const speed = 0.3;
+    let animationId;
+    
+    function animate() {
+        offset -= speed;
+        
+        if (Math.abs(offset) >= slider.scrollWidth / 2) {
+            offset = 0;
+        }
+        
+        slider.style.transform = `translateX(${offset}px)`;
+        animationId = requestAnimationFrame(animate);
+    }
+    
+    animate();
+    
+    slider.addEventListener('mouseenter', () => cancelAnimationFrame(animationId));
+    slider.addEventListener('mouseleave', () => animate());
+});
+
+// ========== ANIMACIONES ==========
+function initAnimations() {
+    // Stats al scroll
+    window.addEventListener('scroll', function() {
+        const stats = document.querySelectorAll('.stat-number, .stat-text');
+        stats.forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            const visible = rect.top < window.innerHeight - 100;
+            if (visible && el.style.animationPlayState !== 'running') {
+                el.style.animationPlayState = 'running';
+            }
+        });
+    });
+    
+    // Reveal elements
+    const revealElements = document.querySelectorAll('.reveal');
+    if (revealElements.length > 0) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+        
+        revealElements.forEach(el => observer.observe(el));
+    }
 }
 
 // ========== FAQ ==========
 function initFAQ() {
-    document.querySelectorAll('.faq-question').forEach(q => {
-        q.addEventListener('click', function () {
-            const a = this.nextElementSibling;
-            const open = this.classList.contains('active');
-
-            document.querySelectorAll('.faq-question').forEach(x => {
-                x.classList.remove('active');
-                x.nextElementSibling.style.display = 'none';
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', function() {
+            const answer = this.nextElementSibling;
+            const isActive = this.classList.contains('active');
+            
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.classList.remove('active');
+                q.nextElementSibling.style.display = 'none';
             });
-
-            if (!open) {
+            
+            if (!isActive) {
                 this.classList.add('active');
-                a.style.display = 'block';
+                answer.style.display = 'block';
             }
         });
     });
 }
 
-// ========== ANIMACIONES ==========
-function initAnimations() {
-    const items = document.querySelectorAll('.reveal');
-    if (!items.length) return;
-
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if (e.isIntersecting) e.target.classList.add('visible');
+// ========== CARACTERÍSTICAS ESPECÍFICAS PARA MÓVIL ==========
+function initMobileSpecificFeatures() {
+    console.log('📱 Inicializando características específicas para móvil');
+    
+    // Asegurar que el header tenga los estilos correctos en móvil
+    if (header) {
+        header.style.backgroundColor = 'var(--white)';
+        header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+    }
+    
+    // Verificar que el menú tenga overlay
+    if (!menuOverlay && navMenu) {
+        // Crear overlay dinámicamente si no existe
+        const overlay = document.createElement('div');
+        overlay.className = 'menu-overlay';
+        document.body.appendChild(overlay);
+        menuOverlay = overlay;
+        
+        // Re-inicializar eventos con el overlay
+        if (navMenu.classList.contains('active')) {
+            overlay.classList.add('active');
+        }
+        
+        overlay.addEventListener('click', function() {
+            if (navMenu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.classList.remove('menu-open');
+            }
         });
-    }, { threshold: 0.2 });
-
-    items.forEach(i => observer.observe(i));
+    }
+    
+    // Verificar que exista el botón de cerrar
+    if (!closeMenuBtn && navMenu) {
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'close-menu';
+        closeBtn.innerHTML = '<span></span><span></span>';
+        
+        // Buscar el header del menú móvil
+        const mobileHeader = navMenu.querySelector('.mobile-menu-header');
+        if (mobileHeader) {
+            mobileHeader.appendChild(closeBtn);
+            closeMenuBtn = closeBtn;
+            
+            closeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                if (menuOverlay) menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.classList.remove('menu-open');
+            });
+        }
+    }
 }
+
+// ========== DEBUG Y VERIFICACIÓN ==========
+function debugMenuSystem() {
+    console.log('🔍 DEBUG - Sistema de Menú:');
+    console.log('- Window width:', window.innerWidth);
+    console.log('- Is mobile?', window.innerWidth <= 920);
+    console.log('- Hamburger exists:', !!hamburger);
+    console.log('- NavMenu exists:', !!navMenu);
+    console.log('- MenuOverlay exists:', !!menuOverlay);
+    console.log('- CloseMenuBtn exists:', !!closeMenuBtn);
+    
+    // Verificar botones Calendly
+    const calendlyButtons = document.querySelectorAll('#btnAbrirCalendly');
+    console.log(`- Calendly buttons: ${calendlyButtons.length}`);
+    
+    calendlyButtons.forEach((btn, i) => {
+        console.log(`  Botón ${i + 1}:`, {
+            text: btn.textContent.trim(),
+            inNavMenu: btn.closest('.nav-menu') !== null,
+            hasClickListener: btn._hasClickListener || 'unknown'
+        });
+    });
+    
+    // Verificar estructura del menú
+    if (navMenu) {
+        const menuItems = navMenu.querySelectorAll('li');
+        console.log(`- Menu items: ${menuItems.length}`);
+        
+        menuItems.forEach((item, i) => {
+            const link = item.querySelector('a');
+            if (link) {
+                console.log(`  Item ${i + 1}:`, {
+                    text: link.textContent.trim(),
+                    href: link.getAttribute('href'),
+                    isCalendly: link.id === 'btnAbrirCalendly'
+                });
+            }
+        });
+    }
+}
+
+// Ejecutar debug después de cargar
+setTimeout(() => {
+    debugMenuSystem();
+    
+    // Verificar eventos
+    if (hamburger) {
+        console.log('✅ Hamburger tiene eventos:', hamburger._hasClickListener || 'unknown');
+    }
+    
+    if (calendly) {
+        console.log('✅ Calendly section está:', calendly.style.display);
+    }
+}, 1500);
