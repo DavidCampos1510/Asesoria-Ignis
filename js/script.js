@@ -10,6 +10,96 @@ window.addEventListener('load', function() {
     }
 });
 
+// ========== MENÚ HAMBURGUESA PARA MÓVILES ==========
+document.addEventListener('DOMContentLoaded', function() {
+    // Menú hamburguesa
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    const header = document.getElementById('header');
+
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Cerrar menú al hacer clic en enlace
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Solo cerrar si no es un botón de acción específica
+                if (this.getAttribute('href') !== '#' && !this.id.includes('btnAbrirCalendly')) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Cerrar menú al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (navMenu && hamburger && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+
+    // Header scroll effect
+    if (header) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        });
+    }
+
+    // Botón volver arriba
+    const backToTop = document.querySelector('.back-to-top');
+    if (backToTop) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('active');
+            } else {
+                backToTop.classList.remove('active');
+            }
+        });
+
+        backToTop.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Manejar clics en botones de WhatsApp para cerrar menú móvil
+    document.querySelectorAll('.whatsapp-float, .hero-buttons a[href*="whatsapp"]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (hamburger) hamburger.classList.remove('active');
+            if (navMenu) navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+    });
+
+    // Mejorar experiencia de formulario en móviles
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('focus', function() {
+                this.style.fontSize = '16px';
+            });
+            
+            select.addEventListener('blur', function() {
+                this.style.fontSize = '';
+            });
+        });
+    }
+});
 
 // ========== VALIDACIÓN DE FORMULARIO Y ENVÍO ==========
 document.addEventListener("DOMContentLoaded", function () {
@@ -267,25 +357,50 @@ const calendly = document.getElementById("calendlySection");
 const footer = document.querySelector("footer");
 
 // Asegurar que al cargar la página el footer esté visible
-footer.style.display = "block";
+if (footer) {
+    footer.style.display = "block";
+}
 
 // MOSTRAR CALENDLY
-document.getElementById("btnAbrirCalendly").addEventListener("click", function(e) {
-    e.preventDefault(); // por si el botón tiene href="#"
-    contenido.style.display = "none";
-    calendly.style.display = "block";
-    footer.style.display = "none"; // ⬅ OCULTAR FOOTER
-    window.scrollTo({ top: 0, behavior: "smooth" });
-});
+const btnAbrirCalendly = document.getElementById("btnAbrirCalendly");
+if (btnAbrirCalendly) {
+    btnAbrirCalendly.addEventListener("click", function(e) {
+        e.preventDefault(); // por si el botón tiene href="#"
+        if (contenido) contenido.style.display = "none";
+        if (calendly) calendly.style.display = "block";
+        if (footer) footer.style.display = "none"; // ⬅ OCULTAR FOOTER
+        
+        // Cerrar menú móvil si está abierto
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        if (hamburger) hamburger.classList.remove('active');
+        if (navMenu) navMenu.classList.remove('active');
+        document.body.style.overflow = '';
+        
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        
+        // Forzar carga del widget Calendly en móviles
+        setTimeout(() => {
+            if (typeof Calendly !== 'undefined') {
+                Calendly.initInlineWidget({
+                    url: 'https://calendly.com/fernanda-herrera-asesorialegalignis/60min',
+                    parentElement: document.querySelector('.calendly-inline-widget')
+                });
+            }
+        }, 100);
+    });
+}
 
 // BOTÓN VOLVER (solo si existe)
 const btnCerrar2 = document.getElementById("btnCerrarCalendly2");
 if (btnCerrar2) {
     btnCerrar2.addEventListener("click", function() {
-        calendly.style.display = "none";
-        calendly.classList.remove("mostrar")
-        contenido.style.display = "block";
-        footer.style.display = "block"; // ⬅ MOSTRAR FOOTER
+        if (calendly) {
+            calendly.style.display = "none";
+            calendly.classList.remove("mostrar");
+        }
+        if (contenido) contenido.style.display = "block";
+        if (footer) footer.style.display = "block"; // ⬅ MOSTRAR FOOTER
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
 }
@@ -293,23 +408,27 @@ if (btnCerrar2) {
 // CUANDO EL CLIENTE AGENDA → VOLVER AL INICIO
 window.addEventListener("message", function(e) {
     if (e.data.event === "calendly.event_scheduled") {
-        calendly.style.display = "none";
-        calendly.classList.add("mostrar");
-        contenido.style.display = "block";
-        footer.style.display = "block"; // ⬅ MOSTRAR FOOTER TAMBIÉN AQUÍ
+        if (calendly) {
+            calendly.style.display = "none";
+            calendly.classList.add("mostrar");
+        }
+        if (contenido) contenido.style.display = "block";
+        if (footer) footer.style.display = "block"; // ⬅ MOSTRAR FOOTER TAMBIÉN AQUÍ
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 });
 
 const backToTop = document.querySelector(".back-to-top");
 
-window.addEventListener("scroll", () => {
-    if (window.scrollY > 400) {
-        backToTop.classList.add("show");
-    } else {
-        backToTop.classList.remove("show");
-    }
-});
+if (backToTop) {
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 400) {
+            backToTop.classList.add("show");
+        } else {
+            backToTop.classList.remove("show");
+        }
+    });
+}
 
 /* 🔥 Cerrar Calendly y navegar correctamente al hacer clic en links del header */
 document.querySelectorAll("#header a").forEach(link => {
@@ -323,19 +442,34 @@ document.querySelectorAll("#header a").forEach(link => {
         const href = link.getAttribute("href");
 
         // Siempre cerramos Calendly y mostramos el contenido normal
-        calendly.style.display = "none";
-        calendly.classList.remove("mostrar");
-        contenido.style.display = "block";
-        footer.style.display = "block";
+        if (calendly) {
+            calendly.style.display = "none";
+            calendly.classList.remove("mostrar");
+        }
+        if (contenido) contenido.style.display = "block";
+        if (footer) footer.style.display = "block";
+
+        // Cerrar menú móvil
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        if (hamburger) hamburger.classList.remove('active');
+        if (navMenu) navMenu.classList.remove('active');
+        document.body.style.overflow = '';
 
         // Si es un enlace a una sección (#home, #services, etc.)
-        if (href && href.startsWith("#")) {
+        if (href && href.startsWith("#") && href !== "#") {
             e.preventDefault(); // evitamos el comportamiento por defecto
 
             const destino = document.querySelector(href);
             if (destino) {
-                // Hacemos scroll suave hacia esa sección
-                destino.scrollIntoView({ behavior: "smooth" });
+                // Ajustar para header fijo
+                const headerHeight = document.getElementById('header')?.offsetHeight || 80;
+                const targetPosition = destino.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: "smooth"
+                });
             }
         }
         // Si es un enlace externo (WhatsApp, redes, etc.), no hacemos preventDefault
@@ -343,39 +477,78 @@ document.querySelectorAll("#header a").forEach(link => {
     });
 });
 
-
-
-
 window.addEventListener("message", function(e) {
     if (e.data.event === "calendly.event_scheduled") {
-
         // Redirigir a la página principal
-        window.location.href = "127.0.0.1:3000/index.html"; // <-- Cambia si tu archivo tiene otro nombre o ruta
-
+        window.location.href = "index.html"; // Usar ruta relativa
     }
 });
 
 // Sombra en header al hacer scroll
-window.addEventListener("scroll", () => {
-    const header = document.getElementById("header");
-
-    if (window.scrollY > 40) header.classList.add("sticky");
-    else header.classList.remove("sticky");
-});
+const header = document.getElementById("header");
+if (header) {
+    window.addEventListener("scroll", () => {
+        if (window.scrollY > 40) header.classList.add("sticky");
+        else header.classList.remove("sticky");
+    });
+}
 
 /* ⭐ Animación de entrada para cada sección */
 const revealElements = document.querySelectorAll(".reveal");
+if (revealElements.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+            }
+        });
+    }, { threshold: 0.2 }); // se activa cuando el 20% es visible
 
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
+    revealElements.forEach(el => observer.observe(el));
+}
+
+// Smooth scroll para enlaces internos con offset para header fijo
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        
+        if (href !== '#' && href !== '') {
+            e.preventDefault();
+            const targetId = href.substring(1);
+            const targetElement = document.getElementById(targetId);
+            const header = document.getElementById('header');
+            
+            if (targetElement && header) {
+                const headerHeight = header.offsetHeight;
+                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+            }
         }
     });
-}, { threshold: 0.2 }); // se activa cuando el 20% es visible
+});
 
-revealElements.forEach(el => observer.observe(el));
-
-
+// FAQ accordion mejorado
+document.querySelectorAll('.faq-question').forEach(question => {
+    question.addEventListener('click', function() {
+        const answer = this.nextElementSibling;
+        const isActive = this.classList.contains('active');
+        
+        // Cerrar todas las respuestas
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.classList.remove('active');
+            q.nextElementSibling.style.display = 'none';
+        });
+        
+        // Abrir la respuesta actual si no estaba activa
+        if (!isActive) {
+            this.classList.add('active');
+            answer.style.display = 'block';
+        }
+    });
+});
 
 });
