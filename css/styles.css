@@ -1683,19 +1683,6 @@ footer a:hover {
         transform: translateY(-2px);
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
-    
-    /* Overlay de fondo cuando el menú está abierto */
-    .nav-menu.active::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.3);
-        z-index: 9998;
-        display: block;
-    }
 }
 
 /* Corrección para el logo en móvil */
@@ -1826,4 +1813,52 @@ footer a:hover {
     .client-icon {
         font-size: 2.5rem;
     }
+}
+/* =========================================================
+   FIX DEFINITIVO – MENÚ MÓVIL CLICKEABLE (Android/iOS)
+   Pegar al FINAL del CSS
+   ========================================================= */
+
+@media (max-width: 920px) {
+
+  /* Asegurar orden de capas correcto */
+  header,
+  #header {
+    z-index: 9999 !important;
+  }
+
+  .hamburger {
+    z-index: 10001 !important;
+  }
+
+  /* Menú siempre por encima y recibiendo eventos */
+  .nav-menu {
+    z-index: 10000 !important;
+    pointer-events: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-menu.active {
+    pointer-events: auto !important;
+  }
+
+  /* Links y botones dentro del menú SIEMPRE clickeables */
+  .nav-menu li,
+  .nav-menu a,
+  .nav-menu button,
+  .nav-menu .btn,
+  .nav-menu .btn-primary {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 10002;
+  }
+
+  /* Por si existe cualquier overlay/pseudo-elemento bloqueando */
+  .nav-menu::before,
+  .nav-menu::after,
+  .nav-menu.active::before,
+  .nav-menu.active::after {
+    pointer-events: none !important;
+  }
 }

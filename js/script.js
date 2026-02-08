@@ -1,11 +1,12 @@
 // ========== PRELOADER ==========
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     const preloader = document.getElementById('preloader');
     if (preloader) {
         preloader.style.opacity = '0';
         preloader.style.transition = 'opacity 0.6s ease';
         setTimeout(() => {
             preloader.style.display = 'none';
+            preloader.style.pointerEvents = 'none';
         }, 600);
     }
 });
@@ -15,23 +16,16 @@ let hamburger, navMenu, navLinks, header;
 let contenido, calendly, footer;
 
 // ========== INICIALIZACIÓN ==========
-document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar variables
+document.addEventListener('DOMContentLoaded', function () {
     hamburger = document.querySelector('.hamburger');
     navMenu = document.querySelector('.nav-menu');
     navLinks = document.querySelectorAll('.nav-menu a');
     header = document.getElementById('header');
-    
-    contenido = document.getElementById("contenidoPrincipal");
-    calendly = document.getElementById("calendlySection");
-    footer = document.querySelector("footer");
-    
-    console.log('Elementos cargados:');
-    console.log('- Hamburger:', !!hamburger);
-    console.log('- NavMenu:', !!navMenu);
-    console.log('- NavLinks:', navLinks.length);
-    
-    // Inicializar módulos
+
+    contenido = document.getElementById('contenidoPrincipal');
+    calendly = document.getElementById('calendlySection');
+    footer = document.querySelector('footer');
+
     initMobileMenu();
     initHeaderEffects();
     initBackToTop();
@@ -44,213 +38,137 @@ document.addEventListener('DOMContentLoaded', function() {
     initAnimations();
 });
 
-// ========== MENÚ MÓVIL ==========
+// ========== MENÚ MÓVIL (CORREGIDO) ==========
 function initMobileMenu() {
     if (!hamburger || !navMenu) return;
-    
-    function closeMobileMenu() {
-        hamburger.classList.remove('active');
-        navMenu.classList.remove('active');
-        document.body.style.overflow = '';
-        document.body.classList.remove('menu-open');
-    }
-    
+
     function openMobileMenu() {
         hamburger.classList.add('active');
         navMenu.classList.add('active');
+
+        navMenu.style.pointerEvents = 'auto';
+        navMenu.style.zIndex = '9999';
+
         document.body.style.overflow = 'hidden';
         document.body.classList.add('menu-open');
     }
-    
-    // Toggle hamburger
-    hamburger.addEventListener('click', function(e) {
+
+    function closeMobileMenu() {
+        hamburger.classList.remove('active');
+        navMenu.classList.remove('active');
+
+        navMenu.style.pointerEvents = '';
+        navMenu.style.zIndex = '';
+
+        document.body.style.overflow = '';
+        document.body.classList.remove('menu-open');
+    }
+
+    hamburger.addEventListener('click', function (e) {
+        e.preventDefault();
         e.stopPropagation();
-        if (navMenu.classList.contains('active')) {
+        navMenu.classList.contains('active') ? closeMobileMenu() : openMobileMenu();
+    });
+
+    // Cerrar al tocar un enlace
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
             closeMobileMenu();
-        } else {
-            openMobileMenu();
+        });
+    });
+
+    // Cerrar tocando fuera
+    document.addEventListener('click', function (e) {
+        if (
+            navMenu.classList.contains('active') &&
+            !navMenu.contains(e.target) &&
+            !hamburger.contains(e.target)
+        ) {
+            closeMobileMenu();
         }
     });
-    
-    // Cerrar al hacer clic fuera (solo en móvil)
-    if (window.innerWidth <= 920) {
-        document.addEventListener('click', function(e) {
-            if (navMenu.classList.contains('active') && 
-                !navMenu.contains(e.target) && 
-                !hamburger.contains(e.target)) {
-                closeMobileMenu();
-            }
-        });
-    }
 }
 
-// ========== NAVEGACIÓN PRINCIPAL ==========
+// ========== NAVEGACIÓN ==========
 function initNavigation() {
-    // Navegación suave para TODOS los enlaces internos
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             const href = this.getAttribute('href');
-            
-            // Saltar enlaces vacíos o a la misma página
-            if (href === '#' || href === '') return;
-            
-            // Evitar conflicto con btnAbrirCalendly
-            if (this.id === 'btnAbrirCalendly') return;
-            
-            const targetId = href.substring(1);
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                e.preventDefault();
-                
-                // Cerrar menú móvil si está abierto
-                if (hamburger && navMenu && navMenu.classList.contains('active')) {
-                    hamburger.classList.remove('active');
-                    navMenu.classList.remove('active');
-                    document.body.style.overflow = '';
-                    document.body.classList.remove('menu-open');
-                }
-                
-                // Asegurar que Calendly esté cerrado y contenido visible
-                if (calendly) calendly.style.display = 'none';
-                if (contenido) contenido.style.display = 'block';
-                if (footer) footer.style.display = 'block';
-                
-                // Calcular scroll con offset para header
-                const headerHeight = header ? header.offsetHeight : 80;
-                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                
-                // Scroll suave
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-                
-                // Actualizar URL
-                history.pushState(null, null, href);
-            }
+            if (!href || href === '#' || this.id === 'btnAbrirCalendly') return;
+
+            const target = document.getElementById(href.substring(1));
+            if (!target) return;
+
+            e.preventDefault();
+
+            if (calendly) calendly.style.display = 'none';
+            if (contenido) contenido.style.display = 'block';
+            if (footer) footer.style.display = 'block';
+
+            const offset = header ? header.offsetHeight : 80;
+            const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+
+            window.scrollTo({ top, behavior: 'smooth' });
+            history.pushState(null, null, href);
         });
     });
-    
-    // Navegación específica para enlaces del header
-    if (header) {
-        header.addEventListener('click', function(e) {
-            const link = e.target.closest('a');
-            if (!link) return;
-            
-            // btnAbrirCalendly se maneja aparte
-            if (link.id === 'btnAbrirCalendly') return;
-            
-            // Los enlaces internos ya están manejados arriba
-            // Solo asegurar Calendly cerrado
-            const href = link.getAttribute('href');
-            if (href && href.startsWith('#')) {
-                if (calendly) calendly.style.display = 'none';
-                if (contenido) contenido.style.display = 'block';
-                if (footer) footer.style.display = 'block';
-            }
-        });
-    }
 }
 
 // ========== CALENDLY ==========
 function initCalendly() {
-    const btnAbrirCalendly = document.getElementById("btnAbrirCalendly");
-    
-    if (btnAbrirCalendly && calendly) {
-        btnAbrirCalendly.addEventListener("click", function(e) {
-            e.preventDefault();
-            
-            // Cerrar menú móvil
-            if (hamburger && navMenu) {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-                document.body.style.overflow = '';
-                document.body.classList.remove('menu-open');
+    const btn = document.getElementById('btnAbrirCalendly');
+    if (!btn || !calendly) return;
+
+    btn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        document.body.style.overflow = '';
+        document.body.classList.remove('menu-open');
+
+        if (contenido) contenido.style.display = 'none';
+        calendly.style.display = 'block';
+        if (footer) footer.style.display = 'none';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        setTimeout(() => {
+            if (typeof Calendly !== 'undefined') {
+                Calendly.initInlineWidget({
+                    url: 'https://calendly.com/fernanda-herrera-asesorialegalignis/60min',
+                    parentElement: document.querySelector('.calendly-inline-widget')
+                });
             }
-            
-            // Mostrar Calendly, ocultar contenido
-            if (contenido) contenido.style.display = "none";
-            if (calendly) calendly.style.display = "block";
-            if (footer) footer.style.display = "none";
-            
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            
-            // Forzar carga en móviles
-            setTimeout(() => {
-                if (typeof Calendly !== 'undefined') {
-                    Calendly.initInlineWidget({
-                        url: 'https://calendly.com/fernanda-herrera-asesorialegalignis/60min',
-                        parentElement: document.querySelector('.calendly-inline-widget')
-                    });
-                }
-            }, 100);
-        });
-    }
-    
-    // Botón volver de Calendly
-    const btnCerrar2 = document.getElementById("btnCerrarCalendly2");
-    if (btnCerrar2 && calendly && contenido) {
-        btnCerrar2.addEventListener("click", function() {
-            calendly.style.display = "none";
-            contenido.style.display = "block";
-            if (footer) footer.style.display = "block";
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-    }
-    
-    // Cuando se agenda en Calendly
-    window.addEventListener("message", function(e) {
-        if (e.data.event === "calendly.event_scheduled") {
-            if (calendly) calendly.style.display = "none";
-            if (contenido) contenido.style.display = "block";
-            if (footer) footer.style.display = "block";
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        }, 100);
     });
 }
 
-// ========== HEADER EFFECTS ==========
+// ========== HEADER ==========
 function initHeaderEffects() {
     if (!header) return;
-    
+
     function updateHeader() {
-        if (window.innerWidth > 920) {
-            if (window.scrollY > 100) {
-                header.classList.add('header-scrolled', 'sticky');
-            } else {
-                header.classList.remove('header-scrolled', 'sticky');
-            }
+        if (window.innerWidth > 920 && window.scrollY > 100) {
+            header.classList.add('header-scrolled', 'sticky');
         } else {
             header.classList.remove('header-scrolled', 'sticky');
         }
     }
-    
+
     window.addEventListener('scroll', updateHeader);
+    window.addEventListener('resize', updateHeader);
     updateHeader();
-    
-    // Responsive
-    window.addEventListener('resize', function() {
-        if (window.innerWidth <= 920) {
-            header.classList.remove('header-scrolled', 'sticky');
-        }
-    });
 }
 
 // ========== BACK TO TOP ==========
 function initBackToTop() {
-    const backToTop = document.querySelector('.back-to-top');
-    if (!backToTop) return;
-    
-    window.addEventListener('scroll', function() {
-        if (window.scrollY > 300) {
-            backToTop.classList.add('active', 'show');
-        } else {
-            backToTop.classList.remove('active', 'show');
-        }
+    const btn = document.querySelector('.back-to-top');
+    if (!btn) return;
+
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('active', window.scrollY > 300);
     });
-    
-    backToTop.addEventListener('click', function(e) {
+
+    btn.addEventListener('click', e => {
         e.preventDefault();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -259,274 +177,52 @@ function initBackToTop() {
 // ========== WHATSAPP ==========
 function initWhatsAppButtons() {
     document.querySelectorAll('.whatsapp-float, a[href*="whatsapp"]').forEach(btn => {
-        btn.addEventListener('click', function() {
-            if (hamburger && navMenu) {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-                document.body.style.overflow = '';
-                document.body.classList.remove('menu-open');
-            }
+        btn.addEventListener('click', () => {
+            document.body.style.overflow = '';
+            document.body.classList.remove('menu-open');
         });
     });
 }
 
 // ========== FORMULARIOS MÓVILES ==========
 function initMobileForms() {
-    if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) return;
-    
+    if (!/Android|iPhone|iPad/i.test(navigator.userAgent)) return;
     document.querySelectorAll('select').forEach(select => {
-        select.addEventListener('focus', function() {
-            this.style.fontSize = '16px';
-        });
-        
-        select.addEventListener('blur', function() {
-            this.style.fontSize = '';
-        });
+        select.addEventListener('focus', () => select.style.fontSize = '16px');
+        select.addEventListener('blur', () => select.style.fontSize = '');
     });
-}
-
-// ========== FORMULARIO DE CONTACTO ==========
-function initContactForm() {
-    const contactForm = document.getElementById('contactForm');
-    if (!contactForm) return;
-    
-    const nameInput = document.getElementById('name');
-    const emailInput = document.getElementById('email');
-    const phoneInput = document.getElementById('phone');
-    const privacyInput = document.getElementById('privacy');
-    const submitBtn = document.getElementById('submitBtn');
-    const submitText = document.getElementById('submitText');
-    const successMessage = document.getElementById('successMessageBottom');
-    
-    if (successMessage) successMessage.style.display = 'none';
-    
-    function showError(input, errorElement, message) {
-        if (errorElement) {
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-        if (input) input.classList.add('error');
-    }
-    
-    function hideError(input, errorElement) {
-        if (errorElement) errorElement.style.display = 'none';
-        if (input) input.classList.remove('error');
-    }
-    
-    function validateName() {
-        if (!nameInput || nameInput.value.trim() === '') {
-            showError(nameInput, document.getElementById('nameError'), 'El nombre es obligatorio');
-            return false;
-        }
-        hideError(nameInput, document.getElementById('nameError'));
-        return true;
-    }
-    
-    function validateEmail() {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailInput || emailInput.value.trim() === '') {
-            showError(emailInput, document.getElementById('emailError'), 'El email es obligatorio');
-            return false;
-        } else if (!emailRegex.test(emailInput.value)) {
-            showError(emailInput, document.getElementById('emailError'), 'Por favor, introduce un email válido');
-            return false;
-        }
-        hideError(emailInput, document.getElementById('emailError'));
-        return true;
-    }
-    
-    function validatePhone() {
-        const phoneRegex = /^[0-9+\-\s()]{8,}$/;
-        if (!phoneInput || phoneInput.value.trim() === '') {
-            showError(phoneInput, document.getElementById('phoneError'), 'El teléfono es obligatorio');
-            return false;
-        } else if (!phoneRegex.test(phoneInput.value)) {
-            showError(phoneInput, document.getElementById('phoneError'), 'Por favor, introduce un teléfono válido');
-            return false;
-        }
-        hideError(phoneInput, document.getElementById('phoneError'));
-        return true;
-    }
-    
-    function validatePrivacy() {
-        if (!privacyInput || !privacyInput.checked) {
-            showError(privacyInput, document.getElementById('privacyError'), 'Debes aceptar la política de privacidad');
-            return false;
-        }
-        hideError(privacyInput, document.getElementById('privacyError'));
-        return true;
-    }
-    
-    // Eventos en tiempo real
-    if (nameInput) nameInput.addEventListener('input', () => hideError(nameInput, document.getElementById('nameError')));
-    if (emailInput) emailInput.addEventListener('input', () => hideError(emailInput, document.getElementById('emailError')));
-    if (phoneInput) phoneInput.addEventListener('input', () => hideError(phoneInput, document.getElementById('phoneError')));
-    if (privacyInput) privacyInput.addEventListener('change', validatePrivacy);
-    
-    // Envío
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const isNameValid = validateName();
-        const isEmailValid = validateEmail();
-        const isPhoneValid = validatePhone();
-        const isPrivacyValid = validatePrivacy();
-        
-        if (!(isNameValid && isEmailValid && isPhoneValid && isPrivacyValid)) {
-            if (!isNameValid) nameInput.focus();
-            else if (!isEmailValid) emailInput.focus();
-            else if (!isPhoneValid) phoneInput.focus();
-            else if (!isPrivacyValid) privacyInput.focus();
-            return;
-        }
-        
-        submitBtn.classList.add('loading');
-        submitBtn.disabled = true;
-        if (submitText) submitText.textContent = 'Enviando...';
-        
-        const tempForm = document.createElement('form');
-        tempForm.method = 'POST';
-        tempForm.action = contactForm.action;
-        tempForm.style.display = 'none';
-        
-        Array.from(contactForm.elements).forEach(el => {
-            if (el.name && el.type !== 'submit' && el.type !== 'checkbox') {
-                const hiddenInput = document.createElement('input');
-                hiddenInput.type = 'hidden';
-                hiddenInput.name = el.name;
-                hiddenInput.value = el.value;
-                tempForm.appendChild(hiddenInput);
-            }
-        });
-        
-        if (privacyInput && privacyInput.checked) {
-            const privacyHidden = document.createElement('input');
-            privacyHidden.type = 'hidden';
-            privacyHidden.name = 'privacy';
-            privacyHidden.value = 'Aceptado';
-            tempForm.appendChild(privacyHidden);
-        }
-        
-        const configFields = {
-            _subject: '🚨 NUEVA CONSULTA LEGAL - Asesoria Legal Ignis',
-            _template: 'table',
-            _captcha: 'false',
-            _autoresponse: '✅ Hemos recibido tu consulta legal. Te contactaremos dentro de 24 horas hábiles. - Asesoria Legal Ignis'
-        };
-        
-        for (const key in configFields) {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = key;
-            input.value = configFields[key];
-            tempForm.appendChild(input);
-        }
-        
-        document.body.appendChild(tempForm);
-        
-        if (successMessage) {
-            successMessage.style.display = 'block';
-            successMessage.style.opacity = '1';
-        }
-        
-        contactForm.reset();
-        
-        setTimeout(() => tempForm.submit(), 150);
-        
-        setTimeout(() => {
-            if (successMessage) {
-                successMessage.style.opacity = '0';
-                setTimeout(() => { successMessage.style.display = 'none'; }, 500);
-            }
-        }, 5000);
-        
-        setTimeout(() => {
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
-            if (submitText) submitText.textContent = 'Enviar Mensaje';
-        }, 2000);
-    });
-}
-
-// ========== TESTIMONIOS ==========
-window.addEventListener('load', function() {
-    const slider = document.querySelector('.testimonials-slider');
-    if (!slider) return;
-    
-    const testimonials = [...document.querySelectorAll('.testimonial')];
-    if (testimonials.length === 0) return;
-    
-    testimonials.forEach((t) => {
-        const clone = t.cloneNode(true);
-        slider.appendChild(clone);
-    });
-    
-    let offset = 0;
-    const speed = 0.3;
-    let animationId;
-    
-    function animate() {
-        offset -= speed;
-        
-        if (Math.abs(offset) >= slider.scrollWidth / 2) {
-            offset = 0;
-        }
-        
-        slider.style.transform = `translateX(${offset}px)`;
-        animationId = requestAnimationFrame(animate);
-    }
-    
-    animate();
-    
-    slider.addEventListener('mouseenter', () => cancelAnimationFrame(animationId));
-    slider.addEventListener('mouseleave', () => animate());
-});
-
-// ========== ANIMACIONES ==========
-function initAnimations() {
-    // Stats al scroll
-    window.addEventListener('scroll', function() {
-        const stats = document.querySelectorAll('.stat-number, .stat-text');
-        stats.forEach((el) => {
-            const rect = el.getBoundingClientRect();
-            const visible = rect.top < window.innerHeight - 100;
-            if (visible && el.style.animationPlayState !== 'running') {
-                el.style.animationPlayState = 'running';
-            }
-        });
-    });
-    
-    // Reveal elements
-    const revealElements = document.querySelectorAll('.reveal');
-    if (revealElements.length > 0) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.2 });
-        
-        revealElements.forEach(el => observer.observe(el));
-    }
 }
 
 // ========== FAQ ==========
 function initFAQ() {
-    document.querySelectorAll('.faq-question').forEach(question => {
-        question.addEventListener('click', function() {
-            const answer = this.nextElementSibling;
-            const isActive = this.classList.contains('active');
-            
-            document.querySelectorAll('.faq-question').forEach(q => {
-                q.classList.remove('active');
-                q.nextElementSibling.style.display = 'none';
+    document.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', function () {
+            const a = this.nextElementSibling;
+            const open = this.classList.contains('active');
+
+            document.querySelectorAll('.faq-question').forEach(x => {
+                x.classList.remove('active');
+                x.nextElementSibling.style.display = 'none';
             });
-            
-            if (!isActive) {
+
+            if (!open) {
                 this.classList.add('active');
-                answer.style.display = 'block';
+                a.style.display = 'block';
             }
         });
     });
+}
+
+// ========== ANIMACIONES ==========
+function initAnimations() {
+    const items = document.querySelectorAll('.reveal');
+    if (!items.length) return;
+
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) e.target.classList.add('visible');
+        });
+    }, { threshold: 0.2 });
+
+    items.forEach(i => observer.observe(i));
 }
