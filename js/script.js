@@ -23,6 +23,13 @@ document.addEventListener('DOMContentLoaded', function() {
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
             document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+            
+            // Agregar clase para cuando el menú está abierto
+            if (navMenu.classList.contains('active')) {
+                document.body.classList.add('menu-open');
+            } else {
+                document.body.classList.remove('menu-open');
+            }
         });
 
         // Cerrar menú al hacer clic en enlace
@@ -33,22 +40,28 @@ document.addEventListener('DOMContentLoaded', function() {
                     hamburger.classList.remove('active');
                     navMenu.classList.remove('active');
                     document.body.style.overflow = '';
+                    document.body.classList.remove('menu-open');
                 }
             });
         });
 
         // Cerrar menú al hacer clic fuera
         document.addEventListener('click', function(e) {
-            if (navMenu && hamburger && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
+            if (navMenu && hamburger && 
+                !navMenu.contains(e.target) && 
+                !hamburger.contains(e.target) &&
+                navMenu.classList.contains('active')) {
+                
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
                 document.body.style.overflow = '';
+                document.body.classList.remove('menu-open');
             }
         });
     }
 
-    // Header scroll effect
-    if (header) {
+    // Header scroll effect - SOLO PARA DESKTOP
+    if (header && window.innerWidth > 920) {
         window.addEventListener('scroll', function() {
             if (window.scrollY > 100) {
                 header.classList.add('header-scrolled');
@@ -56,6 +69,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 header.classList.remove('header-scrolled');
             }
         });
+    }
+
+    // En móvil, desactivar header-scrolled
+    if (header && window.innerWidth <= 920) {
+        header.classList.remove('header-scrolled');
     }
 
     // Botón volver arriba
@@ -84,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (hamburger) hamburger.classList.remove('active');
             if (navMenu) navMenu.classList.remove('active');
             document.body.style.overflow = '';
+            document.body.classList.remove('menu-open');
         });
     });
 
@@ -343,14 +362,6 @@ window.addEventListener("scroll", function () {
   });
 });
 
- document.querySelectorAll(".faq-question").forEach(btn => {
-        btn.addEventListener("click", () => {
-            btn.classList.toggle("active");
-            const content = btn.nextElementSibling;
-            content.style.display = content.style.display === "block" ? "none" : "block";
-        });
-    });
-
 // ELEMENTOS
 const contenido = document.getElementById("contenidoPrincipal");
 const calendly = document.getElementById("calendlySection");
@@ -376,6 +387,7 @@ if (btnAbrirCalendly) {
         if (hamburger) hamburger.classList.remove('active');
         if (navMenu) navMenu.classList.remove('active');
         document.body.style.overflow = '';
+        document.body.classList.remove('menu-open');
         
         window.scrollTo({ top: 0, behavior: "smooth" });
         
@@ -455,6 +467,7 @@ document.querySelectorAll("#header a").forEach(link => {
         if (hamburger) hamburger.classList.remove('active');
         if (navMenu) navMenu.classList.remove('active');
         document.body.style.overflow = '';
+        document.body.classList.remove('menu-open');
 
         // Si es un enlace a una sección (#home, #services, etc.)
         if (href && href.startsWith("#") && href !== "#") {
@@ -484,13 +497,18 @@ window.addEventListener("message", function(e) {
     }
 });
 
-// Sombra en header al hacer scroll
+// Sombra en header al hacer scroll - SOLO PARA DESKTOP
 const header = document.getElementById("header");
-if (header) {
+if (header && window.innerWidth > 920) {
     window.addEventListener("scroll", () => {
         if (window.scrollY > 40) header.classList.add("sticky");
         else header.classList.remove("sticky");
     });
+}
+
+// En móvil, asegurarse de que no haya clase sticky
+if (header && window.innerWidth <= 920) {
+    header.classList.remove("sticky");
 }
 
 /* ⭐ Animación de entrada para cada sección */
@@ -531,7 +549,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// FAQ accordion mejorado
+// FAQ accordion mejorado (ESTE ES EL QUE DEBE QUEDAR)
 document.querySelectorAll('.faq-question').forEach(question => {
     question.addEventListener('click', function() {
         const answer = this.nextElementSibling;
@@ -549,6 +567,19 @@ document.querySelectorAll('.faq-question').forEach(question => {
             answer.style.display = 'block';
         }
     });
+});
+
+// ====== DETECCIÓN DE DISPOSITIVO PARA HEADER ======
+// Detectar cambios de tamaño de ventana
+window.addEventListener('resize', function() {
+    const header = document.getElementById('header');
+    if (header) {
+        if (window.innerWidth <= 920) {
+            // En móvil, remover clases de scroll
+            header.classList.remove('header-scrolled');
+            header.classList.remove('sticky');
+        }
+    }
 });
 
 });

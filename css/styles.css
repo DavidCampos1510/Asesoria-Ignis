@@ -215,23 +215,25 @@ header {
     transition: background-color 0.3s ease, padding 0.3s ease;
 }
 
-/* Header al hacer scroll */
-header.header-scrolled {
-    background-color: #0f172a !important;
-    padding: 8px 0;
-}
-
-header.header-scrolled .nav-menu a,
-header.header-scrolled .logo {
-    color: white !important;
-}
-
-header.header-scrolled .nav-menu a:hover {
-    color: var(--accent-gold) !important;
-}
-
-header.header-scrolled .nav-menu a::after {
-    background-color: var(--accent-gold);
+/* Header al hacer scroll - SOLO EN DESKTOP */
+@media (min-width: 921px) {
+    header.header-scrolled {
+        background-color: #0f172a !important;
+        padding: 8px 0;
+    }
+    
+    header.header-scrolled .nav-menu a,
+    header.header-scrolled .logo {
+        color: white !important;
+    }
+    
+    header.header-scrolled .nav-menu a:hover {
+        color: var(--accent-gold) !important;
+    }
+    
+    header.header-scrolled .nav-menu a::after {
+        background-color: var(--accent-gold);
+    }
 }
 
 /* -------------------------------- */
@@ -396,7 +398,7 @@ header.header-scrolled .nav-menu a::after {
 @media (max-width: 920px) {
     .hamburger {
         display: flex;
-        z-index: 10000;
+        z-index: 10001;
     }
 
     .nav-menu {
@@ -411,7 +413,7 @@ header.header-scrolled .nav-menu a::after {
         gap: 20px;
         box-shadow: -2px 0 15px rgba(0, 0, 0, 0.1);
         transition: right 0.4s ease;
-        z-index: 9999;
+        z-index: 10000;
         overflow-y: auto;
         align-items: flex-start;
     }
@@ -431,6 +433,8 @@ header.header-scrolled .nav-menu a::after {
         border-bottom: 1px solid #eee;
         width: 100%;
         font-size: 1.1rem;
+        color: var(--primary-blue) !important;
+        font-weight: 500;
     }
 
     .nav-menu a::after {
@@ -442,6 +446,29 @@ header.header-scrolled .nav-menu a::after {
         width: 100%;
         text-align: center;
         justify-content: center;
+        color: var(--primary-blue) !important;
+        background-color: var(--accent-gold) !important;
+    }
+    
+    .nav-menu .btn-primary:hover {
+        background-color: #c39d2f !important;
+        color: var(--primary-blue) !important;
+    }
+    
+    /* El menú móvil siempre debe mantener sus colores */
+    .nav-menu,
+    .nav-menu.active {
+        background-color: var(--white) !important;
+    }
+    
+    .nav-menu a,
+    .nav-menu.active a {
+        color: var(--primary-blue) !important;
+    }
+    
+    .nav-menu a:hover,
+    .nav-menu.active a:hover {
+        color: var(--accent-gold) !important;
     }
 }
 
@@ -1533,5 +1560,270 @@ footer a:hover {
     .client-photo {
         width: 70px;
         height: 70px;
+    }
+}
+
+/* ============================================= */
+/* CORRECCIONES ESPECÍFICAS PARA MENÚ MÓVIL      */
+/* ============================================= */
+
+/* En móvil, desactivar completamente el efecto header-scrolled */
+@media (max-width: 920px) {
+    header.header-scrolled {
+        background-color: var(--white) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    header.header-scrolled .logo {
+        color: var(--primary-blue) !important;
+    }
+    
+    header.header-scrolled .hamburger .bar {
+        background-color: var(--primary-blue) !important;
+    }
+    
+    /* Cuando el menú está activo, el hamburguesa cambia a blanco */
+    header.header-scrolled .hamburger.active .bar {
+        background-color: var(--primary-blue) !important;
+    }
+    
+    /* El menú móvil siempre mantiene sus colores originales */
+    .nav-menu,
+    .nav-menu.active {
+        background-color: var(--white) !important;
+    }
+    
+    .nav-menu a,
+    .nav-menu.active a {
+        color: var(--primary-blue) !important;
+        border-bottom-color: #eee;
+    }
+    
+    .nav-menu a:hover,
+    .nav-menu.active a:hover {
+        color: var(--accent-gold) !important;
+    }
+    
+    .nav-menu .btn-primary,
+    .nav-menu.active .btn-primary {
+        color: var(--primary-blue) !important;
+        background-color: var(--accent-gold) !important;
+        border: none;
+    }
+    
+    .nav-menu .btn-primary:hover,
+    .nav-menu.active .btn-primary:hover {
+        background-color: #c39d2f !important;
+        color: var(--primary-blue) !important;
+    }
+}
+
+/* Asegurar que en desktop sí funcione el efecto header-scrolled */
+@media (min-width: 921px) {
+    header.header-scrolled {
+        background-color: #0f172a !important;
+        padding: 8px 0;
+    }
+    
+    header.header-scrolled .logo {
+        color: white !important;
+    }
+    
+    header.header-scrolled .nav-menu a {
+        color: white !important;
+    }
+    
+    header.header-scrolled .nav-menu a:hover {
+        color: var(--accent-gold) !important;
+    }
+    
+    header.header-scrolled .nav-menu a::after {
+        background-color: var(--accent-gold);
+    }
+}
+
+/* Mejoras de usabilidad para menú móvil */
+@media (max-width: 920px) {
+    .nav-menu a {
+        font-size: 1.1rem;
+        padding: 15px 0;
+        display: block;
+        width: 100%;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    
+    .nav-menu a:hover {
+        color: var(--accent-gold) !important;
+    }
+    
+    .nav-menu li {
+        width: 100%;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .nav-menu li:last-child {
+        border-bottom: none;
+    }
+    
+    /* Botones en menú móvil */
+    .nav-menu .btn-primary {
+        margin-top: 15px;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-menu .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Overlay de fondo cuando el menú está abierto */
+    .nav-menu.active::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.3);
+        z-index: 9998;
+        display: block;
+    }
+}
+
+/* Corrección para el logo en móvil */
+@media (max-width: 920px) {
+    .logo {
+        position: relative;
+        z-index: 10001;
+        transition: color 0.3s ease;
+    }
+    
+    /* El logo siempre azul en móvil */
+    .logo {
+        color: var(--primary-blue) !important;
+    }
+    
+    /* Hamburguesa siempre azul en móvil */
+    .hamburger .bar {
+        background-color: var(--primary-blue) !important;
+    }
+    
+    /* Hamburguesa activa en móvil */
+    .hamburger.active .bar {
+        background-color: var(--primary-blue) !important;
+    }
+}
+
+/* FIX DEFINITIVO: Separar completamente el comportamiento móvil de desktop */
+@media (max-width: 920px) {
+    /* Header siempre blanco en móvil */
+    header {
+        background-color: var(--white) !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Desactivar cualquier efecto de scroll en móvil */
+    header.header-scrolled {
+        background-color: var(--white) !important;
+        padding: 15px 0 !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Colores fijos para todos los elementos en móvil */
+    .logo,
+    header.header-scrolled .logo {
+        color: var(--primary-blue) !important;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+    
+    .hamburger .bar,
+    header.header-scrolled .hamburger .bar,
+    .hamburger.active .bar,
+    header.header-scrolled .hamburger.active .bar {
+        background-color: var(--primary-blue) !important;
+    }
+    
+    /* Menú móvil siempre con colores visibles y consistentes */
+    .nav-menu,
+    .nav-menu.active,
+    header.header-scrolled .nav-menu,
+    header.header-scrolled .nav-menu.active {
+        background-color: var(--white) !important;
+        top: 70px;
+    }
+    
+    .nav-menu a,
+    .nav-menu.active a,
+    header.header-scrolled .nav-menu a,
+    header.header-scrolled .nav-menu.active a {
+        color: var(--primary-blue) !important;
+        font-size: 1.1rem;
+    }
+    
+    .nav-menu a:hover,
+    .nav-menu.active a:hover,
+    header.header-scrolled .nav-menu a:hover,
+    header.header-scrolled .nav-menu.active a:hover {
+        color: var(--accent-gold) !important;
+    }
+    
+    .nav-menu .btn-primary,
+    .nav-menu.active .btn-primary,
+    header.header-scrolled .nav-menu .btn-primary,
+    header.header-scrolled .nav-menu.active .btn-primary {
+        color: var(--primary-blue) !important;
+        background-color: var(--accent-gold) !important;
+        border: none;
+    }
+    
+    .nav-menu .btn-primary:hover,
+    .nav-menu.active .btn-primary:hover,
+    header.header-scrolled .nav-menu .btn-primary:hover,
+    header.header-scrolled .nav-menu.active .btn-primary:hover {
+        background-color: #c39d2f !important;
+        color: var(--primary-blue) !important;
+    }
+}
+
+/* Estilos para el icono del cliente en testimonios */
+.client-icon {
+    font-size: 3.5rem;
+    color: var(--accent-gold);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Ajuste para mantener la alineación sin fotos */
+.testimonial {
+    text-align: center;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Para pantallas pequeñas */
+@media (max-width: 768px) {
+    .client-icon {
+        font-size: 3rem;
+    }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+    .client-icon {
+        font-size: 2.5rem;
     }
 }
