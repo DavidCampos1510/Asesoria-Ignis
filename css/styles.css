@@ -27,7 +27,7 @@ body {
     color: var(--text-color);
     background-color: var(--white);
     overflow-x: hidden;
-    padding-top: 80px; /* Espacio para el header fijo */
+    padding-top: 70px !important; /* REDUCIDO de 80px a 70px */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -202,10 +202,10 @@ section {
 }
 
 /* =========================================================
-   HEADER Y NAVEGACIÓN MEJORADA
+   HEADER Y NAVEGACIÓN - COMPACTO Y MEJORADO
    ========================================================= */
 
-/* Header principal */
+/* Header principal - COMPACTO */
 header {
     position: fixed;
     top: 0;
@@ -215,13 +215,14 @@ header {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 9999 !important;
     transition: background-color 0.3s ease, padding 0.3s ease;
+    padding: 5px 0 !important; /* REDUCIDO */
 }
 
 /* Header al hacer scroll - SOLO EN DESKTOP */
 @media (min-width: 921px) {
     header.header-scrolled {
         background-color: #0f172a !important;
-        padding: 8px 0;
+        padding: 3px 0 !important; /* REDUCIDO */
     }
     
     header.header-scrolled .nav-menu a,
@@ -238,12 +239,13 @@ header {
     }
 }
 
-/* Navbar contenedor */
+/* Navbar contenedor - COMPACTO */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.5rem 0;
+    padding: 5px 0 !important; /* REDUCIDO */
+    min-height: 60px !important; /* ALTURA REDUCIDA */
 }
 
 /* Logo */
@@ -255,6 +257,10 @@ header {
     display: flex;
     align-items: center;
     white-space: nowrap;
+    padding: 5px 0;
+    min-width: 180px; /* ANCHO MÍNIMO FIJO */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .logo i {
@@ -290,15 +296,21 @@ header {
     font-size: 0.8rem;
 }
 
-/* Menú escritorio */
+/* Menú escritorio - COMPACTO Y AJUSTADO */
 .nav-menu {
     display: flex;
     align-items: center;
     white-space: nowrap;
+    gap: 15px !important; /* ESPACIO REDUCIDO */
+    margin: 0;
+    padding: 0;
 }
 
 .nav-menu li {
-    margin-left: 2rem;
+    margin-left: 12px !important; /* MARGEN REDUCIDO */
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; /* NO PERMITIR QUE SE ENCOJAN */
 }
 
 .nav-menu a {
@@ -307,6 +319,11 @@ header {
     position: relative;
     text-decoration: none;
     transition: var(--transition);
+    font-size: 0.9rem !important; /* TEXTO MÁS PEQUEÑO */
+    padding: 8px 5px !important; /* PADDING REDUCIDO */
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
 
 .nav-menu a:hover {
@@ -326,6 +343,42 @@ header {
 
 .nav-menu a:hover::after {
     width: 100%;
+}
+
+/* Botones en menú - COMPACTOS Y VISIBLES */
+.nav-menu .btn.btn-primary {
+    background: #d4af37;
+    padding: 8px 15px !important; /* PADDING REDUCIDO */
+    border-radius: 6px;
+    color: #fff !important;
+    font-weight: 600;
+    font-size: 0.9rem !important; /* TEXTO MÁS PEQUEÑO */
+    min-height: auto !important;
+    white-space: nowrap;
+}
+
+/* BOTÓN RESERVAR HORA */
+.nav-menu #btnAbrirCalendly.btn-primary {
+    background: linear-gradient(135deg, #d4af37 0%, #c19c2e 100%);
+    border: none;
+}
+
+.nav-menu #btnAbrirCalendly.btn-primary:hover {
+    background: linear-gradient(135deg, #c19c2e 0%, #b08c25 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* BOTÓN CONSULTA GRATUITA */
+.nav-menu a[href="#contact"].btn.btn-primary {
+    background: linear-gradient(135deg, #0c2a4d 0%, #0a2342 100%);
+    border: none;
+}
+
+.nav-menu a[href="#contact"].btn.btn-primary:hover {
+    background: linear-gradient(135deg, #0a2342 0%, #081c36 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* =========================================================
@@ -471,6 +524,10 @@ header {
         transform: translateX(30px);
         transition: all 0.4s ease;
         transition-delay: calc(var(--i) * 0.1s);
+        display: block !important;
+        width: 100% !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 
     .nav-menu.active li {
@@ -492,7 +549,7 @@ header {
         align-items: center;
         gap: 15px;
         padding: 18px 0;
-        color: var(--primary-blue);
+        color: var(--primary-blue) !important;
         font-size: 1.1rem;
         font-weight: 500;
         text-decoration: none;
@@ -514,7 +571,7 @@ header {
     }
 
     .nav-menu a:hover {
-        color: var(--accent-gold);
+        color: var(--accent-gold) !important;
         padding-left: 10px;
     }
 
@@ -539,11 +596,16 @@ header {
         height: 40%;
     }
 
-    /* BOTÓN "RESERVAR HORA" DESTACADO */
+    /* BOTÓN "RESERVAR HORA" DESTACADO EN MÓVIL */
     .nav-menu .btn-primary {
-        margin-top: 30px;
-        padding: 16px 28px;
-        background: linear-gradient(135deg, var(--accent-gold) 0%, #c19c2e 100%);
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 100% !important;
+        margin-top: 30px !important;
+        margin-bottom: 20px !important;
+        padding: 16px 28px !important;
+        background: linear-gradient(135deg, var(--accent-gold) 0%, #c19c2e 100%) !important;
         color: var(--primary-blue) !important;
         border-radius: 12px;
         font-weight: 600;
@@ -678,7 +740,7 @@ header {
         transform: translateY(-3px);
     }
 
-    /* HEADER FIJO EN MÓVIL */
+    /* HEADER FIJO EN MÓVIL - COMPACTO */
     header {
         position: fixed;
         top: 0;
@@ -687,11 +749,12 @@ header {
         background: var(--white) !important;
         box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
         z-index: 10000 !important;
-        padding: 15px 0;
+        padding: 3px 0 !important; /* REDUCIDO */
     }
 
     .navbar {
         padding: 0;
+        min-height: 50px !important; /* ALTURA REDUCIDA EN MÓVIL */
     }
 
     body.menu-open {
@@ -701,11 +764,17 @@ header {
         height: 100%;
     }
 
+    /* Ajustar body padding para móvil */
+    body {
+        padding-top: 56px !important;
+    }
+
     /* Asegurar que el logo sea visible */
     .logo {
         color: var(--primary-blue) !important;
         font-weight: 700;
         z-index: 10001;
+        font-size: 1rem;
     }
 }
 
@@ -732,6 +801,31 @@ header {
     }
     .logo-text-line {
         display: none;
+    }
+}
+
+@media (max-width: 1100px) {
+    /* Reducir aún más el espacio en pantallas medianas */
+    .nav-menu {
+        gap: 10px !important;
+    }
+    
+    .nav-menu li {
+        margin-left: 8px !important;
+    }
+    
+    .nav-menu a {
+        font-size: 0.85rem !important;
+    }
+    
+    .nav-menu .btn.btn-primary {
+        padding: 6px 12px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .logo {
+        font-size: 1rem;
+        min-width: 160px;
     }
 }
 
@@ -791,8 +885,8 @@ header {
     align-items: center;
     color: var(--white);
     text-align: center;
-    padding-top: 80px;
-    margin-top: -80px;
+    padding-top: 70px !important; /* AJUSTADO */
+    margin-top: -70px !important; /* AJUSTADO */
 }
 
 .hero-content {
@@ -1479,7 +1573,7 @@ footer a:hover {
 @media (max-width: 768px) {
     /* GENERAL */
     body {
-        padding-top: 70px;
+        padding-top: 56px !important; /* AJUSTADO */
     }
     
     h1 {
@@ -1501,8 +1595,8 @@ footer a:hover {
     
     /* HERO */
     .hero {
-        padding-top: 70px;
-        margin-top: -70px;
+        padding-top: 56px !important; /* AJUSTADO */
+        margin-top: -56px !important; /* AJUSTADO */
         height: auto;
         min-height: 100vh;
     }
@@ -1612,8 +1706,8 @@ footer a:hover {
     
     /* CALENDLY */
     #calendlySection {
-        padding-top: 70px;
-        min-height: calc(100vh - 70px);
+        padding-top: 56px !important; /* AJUSTADO */
+        min-height: calc(100vh - 56px);
     }
     
     .reservar-title {
@@ -1696,58 +1790,6 @@ footer a:hover {
 }
 
 /* =========================================================
-   HEADER ORIGINAL RESTAURADO
-   ========================================================= */
-#header {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
-    background: white;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0;
-}
-
-.logo {
-    font-size: 1.2rem;
-    font-weight: 700;
-    font-family: "Playfair Display", serif;
-    color: #0c2a4d;
-    text-decoration: none;
-}
-
-.nav-menu {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-}
-
-.nav-menu a {
-    color: #0c2a4d;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.btn.btn-primary {
-    background: #d4af37;
-    padding: 10px 18px;
-    border-radius: 6px;
-    color: #fff !important;
-    font-weight: 600;
-}
-
-.btn.btn-primary:hover {
-    opacity: 0.85;
-}
-
-/* =========================================================
    CORRECCIONES ESPECÍFICAS PARA MÓVIL
    ========================================================= */
 
@@ -1806,7 +1848,7 @@ footer a:hover {
 @media (min-width: 921px) {
     header.header-scrolled {
         background-color: #0f172a !important;
-        padding: 8px 0;
+        padding: 3px 0 !important; /* REDUCIDO */
     }
     
     header.header-scrolled .logo {
@@ -1904,7 +1946,7 @@ footer a:hover {
     /* Desactivar cualquier efecto de scroll en móvil */
     header.header-scrolled {
         background-color: var(--white) !important;
-        padding: 15px 0 !important;
+        padding: 3px 0 !important;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     
@@ -1929,7 +1971,7 @@ footer a:hover {
     header.header-scrolled .nav-menu,
     header.header-scrolled .nav-menu.active {
         background-color: var(--white) !important;
-        top: 70px;
+        top: 56px; /* AJUSTADO */
     }
     
     .nav-menu a,
@@ -1985,6 +2027,7 @@ footer a:hover {
         pointer-events: auto !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch;
+        padding-bottom: 180px !important; /* ESPACIO PARA SCROLL */
     }
 
     .nav-menu.active {
@@ -2008,41 +2051,6 @@ footer a:hover {
     .nav-menu.active::before,
     .nav-menu.active::after {
         pointer-events: none !important;
-    }
-}
-
-/* =========================================================
-   FIX DEFINITIVO – BOTÓN "RESERVAR HORA" EN MENÚ MÓVIL
-   ========================================================= */
-@media (max-width: 920px) {
-    /* Asegurar que TODOS los li se vean */
-    .nav-menu li {
-        display: block !important;
-        width: 100% !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    /* Forzar visibilidad del botón */
-    .nav-menu .btn-primary,
-    .nav-menu a.btn-primary,
-    .nav-menu li .btn-primary {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-
-        width: 100% !important;
-        margin-top: 20px !important;
-        margin-bottom: 20px !important;
-
-        justify-content: center;
-        align-items: center;
-
-        background-color: var(--accent-gold) !important;
-        color: var(--primary-blue) !important;
-
-        position: relative !important;
-        z-index: 10005 !important;
     }
 }
 
@@ -2215,8 +2223,14 @@ footer a:hover {
     box-shadow: 0 3px 15px rgba(0,0,0,0.12);
 }
 
-  /* Asegurar que el menú permita scroll hasta el final */
-  .nav-menu {
-    overflow-y: auto !important;
-    padding-bottom: 180px !important;
-  }
+/* =========================================================
+   FIX: REMOVER MÁRGENES INNECESARIOS EN HEADER
+   ========================================================= */
+header .container {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.navbar > * {
+    margin: 0;
+}

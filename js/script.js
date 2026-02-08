@@ -57,7 +57,174 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     console.log('🚀 Script inicializado correctamente');
+    
+    // 🔥 FIX ESPECÍFICO PARA BOTÓN CALENDLY EN DESKTOP
+    setTimeout(() => {
+        fixCalendlyButtons();
+        debugCalendlyButtons();
+    }, 500);
 });
+
+// ========== FIX ESPECÍFICO PARA BOTÓN CALENDLY ==========
+function fixCalendlyButtons() {
+    console.log('🔧 Aplicando fix específico para botones Calendly...');
+    
+    // Buscar TODOS los botones con ID 'btnAbrirCalendly'
+    const calendlyButtons = document.querySelectorAll('#btnAbrirCalendly');
+    
+    if (calendlyButtons.length === 0) {
+        console.log('❌ No se encontraron botones Calendly para fix');
+        return;
+    }
+    
+    console.log(`✅ Encontrados ${calendlyButtons.length} botones Calendly para fix`);
+    
+    calendlyButtons.forEach((btn, index) => {
+        // Clonar el botón para limpiar eventos previos
+        const clonedBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(clonedBtn, btn);
+        
+        // Agregar href="#" si no lo tiene
+        if (!clonedBtn.getAttribute('href')) {
+            clonedBtn.setAttribute('href', '#');
+            console.log(`✅ Agregado href="#" al botón ${index + 1}`);
+        }
+        
+        // Agregar evento de clic MANUALMENTE
+        clonedBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log(`🎯 Botón Calendly ${index + 1} clickeado (FIX aplicado)`);
+            console.log('📍 Ubicación:', this.closest('.nav-menu') ? 'Menú' : 'Header');
+            
+            // Cerrar menú móvil si está abierto
+            if (hamburger && navMenu && navMenu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                if (menuOverlay) menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.classList.remove('menu-open');
+                console.log('📱 Menú móvil cerrado');
+            }
+            
+            // Mostrar Calendly, ocultar contenido
+            if (contenido) contenido.style.display = 'none';
+            if (calendly) calendly.style.display = 'block';
+            if (footer) footer.style.display = 'none';
+            
+            // Scroll al inicio
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Forzar carga de Calendly
+            setTimeout(() => {
+                if (typeof Calendly !== 'undefined' && Calendly.initInlineWidget) {
+                    const widget = document.querySelector('.calendly-inline-widget');
+                    if (widget) {
+                        Calendly.initInlineWidget({
+                            url: 'https://calendly.com/fernanda-herrera-asesorialegalignis/60min',
+                            parentElement: widget
+                        });
+                    }
+                }
+            }, 300);
+            
+            return false;
+        });
+        
+        console.log(`✅ Fix aplicado al botón ${index + 1}`);
+    });
+}
+
+// ========== CALENDLY MEJORADO ==========
+function initCalendly() {
+    console.log('🎯 Inicializando Calendly...');
+    
+    // Buscar TODOS los botones con ID 'btnAbrirCalendly'
+    const calendlyButtons = document.querySelectorAll('#btnAbrirCalendly');
+    
+    if (calendlyButtons.length === 0) {
+        console.log('❌ No se encontraron botones de Calendly');
+        return;
+    }
+    
+    console.log(`✅ Encontrados ${calendlyButtons.length} botones de Calendly en initCalendly`);
+    
+    // Agregar eventos a los botones (esto es un respaldo)
+    calendlyButtons.forEach((btn, index) => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log(`🎯 Botón Calendly ${index + 1} clickeado (desde initCalendly)`);
+            
+            // Cerrar menú móvil si está abierto
+            if (hamburger && navMenu && navMenu.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                if (menuOverlay) menuOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                document.body.classList.remove('menu-open');
+            }
+            
+            // Mostrar Calendly, ocultar contenido
+            if (contenido) contenido.style.display = 'none';
+            if (calendly) calendly.style.display = 'block';
+            if (footer) footer.style.display = 'none';
+            
+            // Scroll al inicio
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            return false;
+        });
+    });
+    
+    // Botón volver de Calendly
+    const btnCerrarCalendly2 = document.getElementById('btnCerrarCalendly2');
+    if (btnCerrarCalendly2) {
+        btnCerrarCalendly2.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            if (calendly) calendly.style.display = 'none';
+            if (contenido) contenido.style.display = 'block';
+            if (footer) footer.style.display = 'block';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+    
+    // Detectar cuando se agenda en Calendly
+    window.addEventListener('message', function(e) {
+        if (e.data.event === 'calendly.event_scheduled') {
+            if (calendly) calendly.style.display = 'none';
+            if (contenido) contenido.style.display = 'block';
+            if (footer) footer.style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+}
+
+// ========== DEBUG CALENDLY BUTTONS ==========
+function debugCalendlyButtons() {
+    console.log('🔍 DEBUG - Botones Calendly:');
+    
+    const calendlyButtons = document.querySelectorAll('#btnAbrirCalendly');
+    console.log(`- Total botones encontrados: ${calendlyButtons.length}`);
+    
+    calendlyButtons.forEach((btn, i) => {
+        console.log(`  Botón ${i + 1}:`, {
+            texto: btn.textContent.trim(),
+            href: btn.getAttribute('href'),
+            tieneHref: btn.hasAttribute('href'),
+            ubicación: btn.closest('.nav-menu') ? 'Menú' : 'Otra ubicación',
+            padre: btn.parentNode.tagName
+        });
+    });
+    
+    // Verificar si hay conflictos con otros eventos
+    const navMenuLinks = document.querySelectorAll('.nav-menu a');
+    console.log(`- Total enlaces en menú: ${navMenuLinks.length}`);
+}
 
 // ========== MENÚ HAMBURGUESA MEJORADO ==========
 function initMobileMenu() {
@@ -192,100 +359,6 @@ function initMobileMenu() {
     }, { passive: false });
     
     console.log('✅ Menú móvil MEJORADO inicializado');
-}
-
-// ========== CALENDLY MEJORADO ==========
-function initCalendly() {
-    // IMPORTANTE: Manejar TODOS los botones con ID 'btnAbrirCalendly'
-    const calendlyButtons = document.querySelectorAll('#btnAbrirCalendly');
-    
-    if (calendlyButtons.length === 0) {
-        console.log('❌ No se encontraron botones de Calendly');
-        return;
-    }
-    
-    console.log(`✅ Encontrados ${calendlyButtons.length} botones de Calendly`);
-    
-    calendlyButtons.forEach((btn, index) => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            console.log(`🎯 Botón Calendly ${index + 1} clickeado`);
-            console.log('📍 Ubicación:', btn.closest('.nav-menu') ? 'Menú móvil' : 'Header desktop');
-            
-            // 1. Cerrar menú móvil si está abierto
-            if (hamburger && navMenu && navMenu.classList.contains('active')) {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-                if (menuOverlay) menuOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-                document.body.classList.remove('menu-open');
-                console.log('📱 Menú móvil cerrado antes de abrir Calendly');
-            }
-            
-            // 2. Mostrar Calendly, ocultar contenido y footer
-            if (contenido) {
-                contenido.style.display = 'none';
-                console.log('📦 Contenido principal ocultado');
-            }
-            
-            if (calendly) {
-                calendly.style.display = 'block';
-                console.log('📅 Sección Calendly mostrada');
-            }
-            
-            if (footer) {
-                footer.style.display = 'none';
-                console.log('⬇️ Footer ocultado');
-            }
-            
-            // 3. Scroll al inicio
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // 4. Forzar carga del widget Calendly (especialmente en móviles)
-            setTimeout(() => {
-                const calendlyWidget = document.querySelector('.calendly-inline-widget');
-                if (calendlyWidget) {
-                    // Limpiar contenido anterior
-                    calendlyWidget.innerHTML = '';
-                    
-                    if (typeof Calendly !== 'undefined') {
-                        Calendly.initInlineWidget({
-                            url: 'https://calendly.com/fernanda-herrera-asesorialegalignis/60min',
-                            parentElement: calendlyWidget,
-                            prefill: {},
-                            utm: {}
-                        });
-                        console.log('🔄 Widget Calendly inicializado en móvil');
-                    }
-                }
-            }, 300);
-        });
-    });
-    
-    // Botón volver de Calendly (si existe)
-    const btnCerrarCalendly2 = document.getElementById('btnCerrarCalendly2');
-    if (btnCerrarCalendly2 && calendly && contenido) {
-        btnCerrarCalendly2.addEventListener('click', function() {
-            calendly.style.display = 'none';
-            contenido.style.display = 'block';
-            if (footer) footer.style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            console.log('🔙 Calendly cerrado, volviendo al contenido');
-        });
-    }
-    
-    // Cuando se agenda en Calendly
-    window.addEventListener('message', function(e) {
-        if (e.data.event === 'calendly.event_scheduled') {
-            if (calendly) calendly.style.display = 'none';
-            if (contenido) contenido.style.display = 'block';
-            if (footer) footer.style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            console.log('✅ Evento agendado, volviendo al inicio');
-        }
-    });
 }
 
 // ========== NAVEGACIÓN MEJORADA ==========
@@ -747,56 +820,42 @@ function initMobileSpecificFeatures() {
     }
 }
 
-// ========== DEBUG Y VERIFICACIÓN ==========
-function debugMenuSystem() {
-    console.log('🔍 DEBUG - Sistema de Menú:');
-    console.log('- Window width:', window.innerWidth);
-    console.log('- Is mobile?', window.innerWidth <= 920);
-    console.log('- Hamburger exists:', !!hamburger);
-    console.log('- NavMenu exists:', !!navMenu);
-    console.log('- MenuOverlay exists:', !!menuOverlay);
-    console.log('- CloseMenuBtn exists:', !!closeMenuBtn);
+// ========== EVENT LISTENER GLOBAL DE RESPALDO ==========
+// Esto capturará cualquier clic en el botón Calendly que no haya sido capturado
+document.addEventListener('click', function(e) {
+    // Verificar si el clic fue en un botón Calendly o dentro de él
+    const target = e.target;
+    const isCalendlyBtn = target.id === 'btnAbrirCalendly' || 
+                         target.closest('#btnAbrirCalendly');
     
-    // Verificar botones Calendly
-    const calendlyButtons = document.querySelectorAll('#btnAbrirCalendly');
-    console.log(`- Calendly buttons: ${calendlyButtons.length}`);
-    
-    calendlyButtons.forEach((btn, i) => {
-        console.log(`  Botón ${i + 1}:`, {
-            text: btn.textContent.trim(),
-            inNavMenu: btn.closest('.nav-menu') !== null,
-            hasClickListener: btn._hasClickListener || 'unknown'
-        });
-    });
-    
-    // Verificar estructura del menú
-    if (navMenu) {
-        const menuItems = navMenu.querySelectorAll('li');
-        console.log(`- Menu items: ${menuItems.length}`);
+    if (isCalendlyBtn) {
+        e.preventDefault();
+        e.stopPropagation();
         
-        menuItems.forEach((item, i) => {
-            const link = item.querySelector('a');
-            if (link) {
-                console.log(`  Item ${i + 1}:`, {
-                    text: link.textContent.trim(),
-                    href: link.getAttribute('href'),
-                    isCalendly: link.id === 'btnAbrirCalendly'
-                });
-            }
-        });
+        console.log('🎯 Click GLOBAL detectado en botón Calendly (respaldo)');
+        
+        // Obtener el botón real
+        const btn = target.id === 'btnAbrirCalendly' ? target : target.closest('#btnAbrirCalendly');
+        
+        // Cerrar menú móvil si está abierto
+        if (hamburger && navMenu && navMenu.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+            if (menuOverlay) menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.classList.remove('menu-open');
+        }
+        
+        // Mostrar Calendly, ocultar contenido
+        if (contenido) contenido.style.display = 'none';
+        if (calendly) calendly.style.display = 'block';
+        if (footer) footer.style.display = 'none';
+        
+        // Scroll al inicio
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        return false;
     }
-}
+});
 
-// Ejecutar debug después de cargar
-setTimeout(() => {
-    debugMenuSystem();
-    
-    // Verificar eventos
-    if (hamburger) {
-        console.log('✅ Hamburger tiene eventos:', hamburger._hasClickListener || 'unknown');
-    }
-    
-    if (calendly) {
-        console.log('✅ Calendly section está:', calendly.style.display);
-    }
-}, 1500);
+console.log('✅ Script de fix Calendly cargado');
