@@ -2909,7 +2909,7 @@ header .container {
 @media (max-width: 480px) {
   #ignis-chat-tooltip {
     right: 12px;
-    bottom: 160px;
+    bottom: 230px;
     max-width: 200px;
     font-size: 13px;
     padding: 11px 14px;
@@ -2918,15 +2918,15 @@ header .container {
   #ignis-chat-window {
     right: 10px;
     left: 10px;
-    bottom: 160px;
+    bottom: 210px;
     width: auto;
-    height: 72vh;
+    height: 68vh;
     max-height: 650px;
   }
 
   #ignis-chat-toggle {
     right: 16px;
-    bottom: 90px;
+    bottom: 140px;
     width: 60px;
     height: 60px;
   }
