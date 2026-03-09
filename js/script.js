@@ -859,3 +859,501 @@ document.addEventListener('click', function(e) {
 });
 
 console.log('✅ Script de fix Calendly cargado');
+
+document.addEventListener("DOMContentLoaded", function () {
+  const chatToggle = document.getElementById("ignis-chat-toggle");
+  const chatWindow = document.getElementById("ignis-chat-window");
+  const chatClose = document.getElementById("ignis-chat-close");
+  const chatInput = document.getElementById("ignis-chat-input");
+  const chatSend = document.getElementById("ignis-chat-send");
+  const chatMessages = document.getElementById("ignis-chat-messages");
+  const chatTooltip = document.getElementById("ignis-chat-tooltip");
+
+  const whatsappNumber = "56923641871";
+
+  const state = {
+    area: "",
+    hasDocuments: "",
+    recent: "",
+    wantsWhatsApp: "",
+    clientName: "",
+    city: "",
+    phone: "",
+    contactTime: "",
+    memory: [],
+    guidedMode: false,
+    guidedStep: 0,
+    invitationShown: false
+  };
+
+  function resetGuidedData() {
+    state.area = "";
+    state.hasDocuments = "";
+    state.recent = "";
+    state.wantsWhatsApp = "";
+    state.clientName = "";
+    state.city = "";
+    state.phone = "";
+    state.contactTime = "";
+    state.guidedStep = 0;
+  }
+
+  if (chatToggle && chatWindow) {
+    chatToggle.addEventListener("click", () => {
+      chatWindow.classList.toggle("hidden");
+
+      if (chatTooltip) chatTooltip.classList.add("hidden");
+
+      if (!chatWindow.classList.contains("hidden")) {
+        setTimeout(() => {
+          if (chatInput) chatInput.focus();
+        }, 250);
+
+        if (!state.invitationShown) {
+          setTimeout(() => {
+            addBotMessage("Si quieres, puedo hacerte unas preguntas breves para orientarte mejor.");
+            setTimeout(() => {
+              addQuickButtons([
+                { label: "Sí, comenzar", value: "Iniciar evaluación" },
+                { label: "Solo orientación", value: "Solo quiero orientación general" },
+                { label: "Solo contacto", value: "Solo quiero contacto" }
+              ]);
+            }, 350);
+          }, 700);
+          state.invitationShown = true;
+        }
+      }
+    });
+  }
+
+  if (chatClose && chatWindow) {
+    chatClose.addEventListener("click", () => {
+      chatWindow.classList.add("hidden");
+    });
+  }
+
+  if (chatSend) {
+    chatSend.addEventListener("click", sendMessage);
+  }
+
+  if (chatInput) {
+    chatInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") sendMessage();
+    });
+  }
+
+  setTimeout(() => {
+    if (chatTooltip) chatTooltip.classList.remove("hidden");
+  }, 900);
+
+  window.sendQuickMessage = function (text) {
+    if (!chatInput) return;
+    chatInput.value = text;
+    sendMessage();
+  };
+
+  function sendMessage() {
+    if (!chatInput || !chatMessages) return;
+
+    const userText = chatInput.value.trim();
+    if (!userText) return;
+
+    state.memory.push(userText);
+    addMessage(userText, "user");
+    chatInput.value = "";
+
+    const typingId = addTyping();
+
+    setTimeout(() => {
+      removeTyping(typingId);
+      processMessage(userText);
+    }, 900);
+  }
+
+  function processMessage(input) {
+    const text = normalizeText(input);
+
+    if (isGreeting(text)) {
+      addBotMessage(getGreetingResponse(), true);
+      return;
+    }
+
+    if (text.includes("solo quiero contacto")) {
+      addBotMessage("Perfecto. Puedes escribirnos directamente para recibir atención más rápida.");
+      addBotMessage(whatsappSmartButton("Contacto directo por WhatsApp"), true);
+      return;
+    }
+
+    if (text.includes("solo quiero orientacion general") || text.includes("solo quiero orientación general")) {
+      addBotMessage("Claro. Puedes contarme brevemente si tu consulta es laboral, familiar, civil o penal, y te orientaré de forma general.");
+      addQuickButtons([
+        { label: "Laboral", value: "Mi consulta es laboral" },
+        { label: "Familiar", value: "Mi consulta es familiar" },
+        { label: "Civil", value: "Mi consulta es civil" },
+        { label: "Penal", value: "Mi consulta es penal" }
+      ]);
+      return;
+    }
+
+    if (text.includes("iniciar evaluacion")) {
+      startGuidedFlow();
+      return;
+    }
+
+    if (state.guidedMode) {
+      handleGuidedFlow(input);
+      return;
+    }
+
+    const quick = detectGeneralIntent(text);
+    addBotMessage(quick, true);
+  }
+
+  function isGreeting(text) {
+    return containsAny(text, [
+      "hola",
+      "buenos dias",
+      "buenas tardes",
+      "buenas noches",
+      "buen dia",
+      "buenas"
+    ]);
+  }
+
+  function getGreetingResponse() {
+    const responses = [
+      "Hola, bienvenido a <strong>Asesoría Legal Ignis</strong>. Puedo darte orientación general o, si prefieres, iniciar una evaluación breve para entender mejor tu consulta.<br><br>" + greetingButtons(),
+      "Hola, gracias por escribirnos. Si quieres, puedo orientarte de forma general o hacerte unas preguntas breves para derivarte mejor.<br><br>" + greetingButtons(),
+      "Bienvenido a Asesoría Legal Ignis. Estoy aquí para ayudarte con una orientación inicial o con una evaluación breve de tu consulta.<br><br>" + greetingButtons()
+    ];
+
+    const index = Math.floor(Math.random() * responses.length);
+    return responses[index];
+  }
+
+  function greetingButtons() {
+    return `
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+        <button type="button" onclick="sendQuickMessage('Solo quiero orientación general')" style="border:none;background:#D4AF37;color:#0A2463;font-weight:700;border-radius:10px;padding:10px 12px;cursor:pointer;">
+          Orientación general
+        </button>
+        <button type="button" onclick="sendQuickMessage('Iniciar evaluación')" style="border:none;background:#0A2463;color:#fff;font-weight:700;border-radius:10px;padding:10px 12px;cursor:pointer;">
+          Iniciar evaluación breve
+        </button>
+      </div>
+    `;
+  }
+
+  function startGuidedFlow() {
+    resetGuidedData();
+    state.guidedMode = true;
+    state.guidedStep = 1;
+
+    addBotMessage("Comencemos. ¿Tu consulta es laboral, familiar, civil o penal?");
+    addQuickButtons([
+      { label: "Laboral", value: "Mi consulta es laboral" },
+      { label: "Familiar", value: "Mi consulta es familiar" },
+      { label: "Civil", value: "Mi consulta es civil" },
+      { label: "Penal", value: "Mi consulta es penal" }
+    ]);
+  }
+
+  function handleGuidedFlow(input) {
+    const text = normalizeText(input);
+
+    if (state.guidedStep === 1) {
+      if (containsAny(text, ["laboral", "trabajo", "despido", "finiquito"])) {
+        state.area = "Laboral";
+      } else if (containsAny(text, ["familiar", "familia", "divorcio", "pension", "alimentos"])) {
+        state.area = "Familiar";
+      } else if (containsAny(text, ["civil", "deuda", "deudas", "contrato", "arriendo"])) {
+        state.area = "Civil";
+      } else if (containsAny(text, ["penal", "delito", "denuncia", "carabineros", "fiscalia", "detenido", "detencion", "acusacion"])) {
+        state.area = "Penal";
+      } else {
+        addBotMessage("No logré identificar bien el área. ¿Tu consulta es laboral, familiar, civil o penal?");
+        return;
+      }
+
+      state.guidedStep = 2;
+      addBotMessage(`Entiendo. Tu consulta parece ser del área ${state.area}. ¿Tienes documentos o antecedentes relacionados?`);
+      addQuickButtons([
+        { label: "Sí, tengo documentos", value: "Sí, tengo documentos" },
+        { label: "No todavía", value: "No tengo documentos" }
+      ]);
+      return;
+    }
+
+    if (state.guidedStep === 2) {
+      const cleanText = normalizeText(input);
+
+      if (
+        cleanText === "no" ||
+        cleanText === "no todavia" ||
+        cleanText === "no todavía" ||
+        cleanText === "no tengo documentos" ||
+        cleanText === "no tengo antecedentes"
+      ) {
+        state.hasDocuments = "No";
+      } else if (
+        cleanText === "si" ||
+        cleanText === "sí" ||
+        cleanText === "si tengo documentos" ||
+        cleanText === "sí tengo documentos" ||
+        cleanText === "tengo documentos" ||
+        cleanText === "tengo antecedentes"
+      ) {
+        state.hasDocuments = "Sí";
+      } else {
+        addBotMessage("Por favor indícame si tienes documentos o antecedentes del caso.");
+        return;
+      }
+
+      state.guidedStep = 3;
+      addBotMessage("Gracias. ¿Ocurrió hace poco o ya pasó hace bastante tiempo?");
+      addQuickButtons([
+        { label: "Ocurrió hace poco", value: "Ocurrió hace poco" },
+        { label: "Pasó hace tiempo", value: "Pasó hace tiempo" }
+      ]);
+      return;
+    }
+
+    if (state.guidedStep === 3) {
+      if (containsAny(text, ["hace poco", "reciente", "recien", "recién", "ocurrio hace poco", "ocurrió hace poco"])) {
+        state.recent = "Reciente";
+      } else if (containsAny(text, ["hace tiempo", "antiguo", "paso hace tiempo", "pasó hace tiempo"])) {
+        state.recent = "No reciente";
+      } else {
+        addBotMessage("Indícame si ocurrió hace poco o si ya pasó hace tiempo.");
+        return;
+      }
+
+      state.guidedStep = 4;
+      addBotMessage(buildDiagnosis(), true);
+
+      setTimeout(() => {
+        addBotMessage("¿Quieres que te contacten por WhatsApp?");
+        addQuickButtons([
+          { label: "Sí, por WhatsApp", value: "Sí, quiero que me contacten por WhatsApp" },
+          { label: "Continuar", value: "Continuar evaluación" }
+        ]);
+      }, 400);
+      return;
+    }
+
+    if (state.guidedStep === 4) {
+      if (containsAny(text, ["si", "sí", "whatsapp", "quiero que me contacten"])) {
+        state.wantsWhatsApp = "Sí";
+      } else if (containsAny(text, ["continuar", "continuar evaluacion", "continuar evaluación"])) {
+        state.wantsWhatsApp = "Sí";
+      } else {
+        addBotMessage("Puedes indicar si quieres continuar por WhatsApp.");
+        return;
+      }
+
+      state.guidedStep = 5;
+      addBotMessage("Perfecto. ¿Cuál es tu nombre?");
+      return;
+    }
+
+    if (state.guidedStep === 5) {
+      state.clientName = input.trim();
+      state.guidedStep = 6;
+      addBotMessage(`Gracias, ${escapeHtml(state.clientName)}. ¿Cuál es tu comuna o ciudad?`);
+      return;
+    }
+
+    if (state.guidedStep === 6) {
+      state.city = input.trim();
+      state.guidedStep = 7;
+      addBotMessage("Gracias. ¿Cuál es tu teléfono de contacto?");
+      return;
+    }
+
+    if (state.guidedStep === 7) {
+      state.phone = input.trim();
+      state.guidedStep = 8;
+      addBotMessage("Perfecto. ¿Cuál es el mejor horario para contactarte?");
+      addQuickButtons([
+        { label: "Mañana", value: "Mañana" },
+        { label: "Tarde", value: "Tarde" },
+        { label: "Noche", value: "Noche" }
+      ]);
+      return;
+    }
+
+    if (state.guidedStep === 8) {
+      state.contactTime = input.trim();
+      state.guidedStep = 9;
+
+      addBotMessage(
+        `Gracias, ${escapeHtml(state.clientName)}. Tu consulta ha sido registrada correctamente.<br><br>Un miembro del equipo de <strong>Asesoría Legal Ignis</strong> revisará la información entregada y se pondrá en contacto contigo para brindarte una orientación inicial.`,
+        true
+      );
+
+      addBotMessage(buildContactMessage(), true);
+      state.guidedMode = false;
+    }
+  }
+
+  function buildDiagnosis() {
+    let urgency = state.recent === "Reciente" ? "Media/Alta" : "Media";
+    let readiness = state.hasDocuments === "Sí" ? "Buena" : state.hasDocuments === "No" ? "Inicial" : "No definido";
+    let areaText = state.area || "General";
+
+    return `
+      <div class="ignis-analysis-card">
+        <div class="ignis-analysis-title">Diagnóstico inicial orientativo</div>
+        Área detectada: <strong>${areaText}</strong><br>
+        Nivel preliminar de urgencia: <strong>${urgency}</strong><br>
+        Estado de antecedentes: <strong>${readiness}</strong><br><br>
+        Esta evaluación es solo informativa y sirve para orientar el primer contacto con el estudio.
+      </div>
+    `;
+  }
+
+  function buildContactMessage() {
+    const text = `Hola, soy ${state.clientName || "un visitante"}.
+Vengo desde la web de Asesoría Legal Ignis.
+Mi consulta parece ser del área: ${state.area || "No especificada"}.
+Tengo documentos: ${state.hasDocuments === "Sí" ? "Sí" : state.hasDocuments === "No" ? "No" : "No indicado"}.
+Ocurrió: ${state.recent || "No indicado"}.
+Comuna o ciudad: ${state.city || "No indicada"}.
+Teléfono de contacto: ${state.phone || "No indicado"}.
+Mejor horario para contactar: ${state.contactTime || "No indicado"}.
+Necesito orientación.`;
+
+    const encoded = encodeURIComponent(text);
+
+    return `
+      <div class="ignis-analysis-card">
+        <div class="ignis-analysis-title">Siguiente paso recomendado</div>
+        Puedes continuar tu atención con un resumen inicial ya preparado para WhatsApp.
+        <br>
+        <a class="ignis-whatsapp-link" href="https://wa.me/${whatsappNumber}?text=${encoded}" target="_blank" rel="noopener noreferrer">
+          Enviar resumen por WhatsApp
+        </a>
+      </div>
+    `;
+  }
+
+  function whatsappSmartButton(label) {
+    const text = encodeURIComponent("Hola, vengo desde la página de Asesoría Legal Ignis y necesito orientación.");
+    return `<a class="ignis-whatsapp-link" href="https://wa.me/${whatsappNumber}?text=${text}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  }
+
+  function detectGeneralIntent(text) {
+    if (containsAny(text, ["laboral", "despido", "finiquito", "trabajo"])) {
+      return "Tu consulta parece ser laboral. Si quieres, puedo hacerte unas preguntas breves para orientarte mejor." + quickStartEval();
+    }
+
+    if (containsAny(text, ["familia", "divorcio", "pension", "alimentos", "visitas"])) {
+      return "Tu consulta parece relacionarse con familia. Puedo ayudarte con una evaluación inicial guiada." + quickStartEval();
+    }
+
+    if (containsAny(text, ["civil", "deuda", "deudas", "contrato", "arriendo"])) {
+      return "Tu consulta parece ser civil. Si quieres, puedo hacerte algunas preguntas para orientarte mejor." + quickStartEval();
+    }
+
+    if (containsAny(text, ["penal", "delito", "denuncia", "carabineros", "fiscalia", "detenido", "detencion", "acusacion"])) {
+      return "Tu consulta parece relacionarse con penal. Puedo ayudarte con una orientación inicial guiada." + quickStartEval();
+    }
+
+    if (containsAny(text, ["contacto", "whatsapp", "telefono", "correo"])) {
+      return "Puedes escribirnos directamente para una atención más rápida.<br>" + whatsappSmartButton("Hablar por WhatsApp");
+    }
+
+    return "Puedo orientarte de forma general o iniciar una evaluación breve para entender mejor tu consulta." + quickStartEval();
+  }
+
+  function quickStartEval() {
+    return `<br><br><button type="button" onclick="sendQuickMessage('Iniciar evaluación')" style="border:none;background:#D4AF37;color:#0A2463;font-weight:700;border-radius:10px;padding:10px 12px;cursor:pointer;">Iniciar evaluación guiada</button>`;
+  }
+
+  function addQuickButtons(buttons) {
+    const wrapper = document.createElement("div");
+    wrapper.className = "ignis-quick-options";
+
+    buttons.forEach(btn => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = btn.label;
+      button.addEventListener("click", () => {
+        sendQuickMessage(btn.value);
+      });
+      wrapper.appendChild(button);
+    });
+
+    chatMessages.appendChild(wrapper);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function addTyping() {
+    const typing = document.createElement("div");
+    typing.className = "ignis-msg bot ignis-typing";
+
+    const bubble = document.createElement("div");
+    bubble.className = "ignis-bubble";
+    bubble.innerHTML = `Ignis está escribiendo <span class="ignis-dots"><span></span><span></span><span></span></span>`;
+
+    typing.appendChild(bubble);
+    chatMessages.appendChild(typing);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return typing;
+  }
+
+  function removeTyping(typingElement) {
+    if (typingElement && typingElement.parentNode) {
+      typingElement.parentNode.removeChild(typingElement);
+    }
+  }
+
+  function addMessage(text, sender, allowHTML = false) {
+    const msg = document.createElement("div");
+    msg.className = `ignis-msg ${sender}`;
+
+    const bubble = document.createElement("div");
+    bubble.className = "ignis-bubble";
+
+    if (allowHTML) {
+      bubble.innerHTML = text;
+    } else {
+      bubble.textContent = text;
+    }
+
+    msg.appendChild(bubble);
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function addBotMessage(text, allowHTML = false) {
+    addMessage(text, "bot", allowHTML);
+  }
+
+  function containsAny(text, keywords) {
+    text = normalizeText(text);
+    return keywords.some(keyword => text.includes(normalizeText(keyword)));
+  }
+
+  function normalizeText(str) {
+    return str
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^\w\s]/gi, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+});
+
+
+

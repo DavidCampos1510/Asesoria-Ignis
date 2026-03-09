@@ -2536,3 +2536,412 @@ header .container {
 .navbar > * {
     margin: 0;
 }
+
+#ignis-chatbot {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#ignis-chat-tooltip {
+  position: fixed;
+  right: 24px;
+  bottom: 172px;
+  background: #ffffff;
+  color: #0A2463;
+  border: 1px solid rgba(10, 36, 99, 0.12);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.14);
+  z-index: 99997;
+  animation: ignisTooltipFloat 2.2s ease-in-out infinite;
+  max-width: 240px;
+  line-height: 1.4;
+}
+
+#ignis-chat-tooltip::after {
+  content: "";
+  position: absolute;
+  right: 24px;
+  bottom: -8px;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-right: 1px solid rgba(10, 36, 99, 0.12);
+  border-bottom: 1px solid rgba(10, 36, 99, 0.12);
+  transform: rotate(45deg);
+}
+
+#ignis-chat-tooltip.hidden {
+  display: none;
+}
+
+#ignis-chat-toggle {
+  position: fixed;
+  bottom: 95px;
+  right: 24px;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  z-index: 99999;
+  background: linear-gradient(135deg, #0A2463, #123b9a);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: ignisPulse 2.4s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#ignis-chat-toggle:hover {
+  transform: scale(1.08);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.34);
+}
+
+.ignis-chat-icon {
+  font-size: 31px;
+  color: #D4AF37;
+  animation: ignisIconGlow 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.45));
+}
+
+#ignis-chat-window {
+  position: fixed;
+  bottom: 170px;
+  right: 24px;
+  width: 400px;
+  max-width: calc(100vw - 20px);
+  height: 620px;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+  z-index: 99998;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e8e8e8;
+  transform-origin: bottom right;
+  animation: ignisOpen 0.28s ease;
+}
+
+#ignis-chat-window.hidden {
+  display: none;
+}
+
+.ignis-chat-header {
+  background: linear-gradient(135deg, #0A2463, #163d8a);
+  color: #fff;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ignis-chat-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ignis-chat-avatar {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #f7e29d, #D4AF37 60%, #b48a12);
+  color: #0A2463;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.35);
+  animation: ignisIconGlow 2.4s ease-in-out infinite;
+}
+
+.ignis-chat-header h3 {
+  margin: 0;
+  font-size: 17px;
+  color: #F4D77A;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ignis-chat-header p {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: #eef2ff;
+  opacity: 0.96;
+}
+
+#ignis-chat-close {
+  border: none;
+  background: transparent;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.ignis-chat-messages {
+  flex: 1;
+  padding: 14px;
+  background: linear-gradient(180deg, #f8f9fc 0%, #f3f5fa 100%);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ignis-msg {
+  display: flex;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: ignisMessageIn 0.25s ease forwards;
+}
+
+.ignis-msg.user {
+  justify-content: flex-end;
+}
+
+.ignis-msg.bot {
+  justify-content: flex-start;
+}
+
+.ignis-bubble {
+  max-width: 84%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+.ignis-msg.bot .ignis-bubble {
+  background: #ffffff;
+  color: #222;
+  border: 1px solid #e7e7e7;
+  border-top-left-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.ignis-msg.user .ignis-bubble {
+  background: #0A2463;
+  color: #fff;
+  border-top-right-radius: 4px;
+}
+
+.ignis-typing .ignis-bubble {
+  color: #5b6785;
+  font-style: italic;
+}
+
+.ignis-dots {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.ignis-dots span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8a94af;
+  animation: ignisDots 1.2s infinite ease-in-out;
+}
+
+.ignis-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.ignis-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.ignis-quick-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.ignis-quick-options button {
+  border: 1px solid #d4af37;
+  background: linear-gradient(180deg, #fffdf7 0%, #fff5d8 100%);
+  color: #0A2463;
+  padding: 9px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  transition: 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.ignis-quick-options button:hover {
+  background: #D4AF37;
+  color: #0A2463;
+  transform: translateY(-1px);
+}
+
+.ignis-analysis-card {
+  background: linear-gradient(180deg, #fffdf7 0%, #fff6dd 100%);
+  border: 1px solid #ecd17c;
+  border-radius: 14px;
+  padding: 12px;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #3d3316;
+}
+
+.ignis-analysis-title {
+  font-weight: 700;
+  color: #0A2463;
+  margin-bottom: 6px;
+}
+
+.ignis-chat-notice {
+  background: #fff8e6;
+  color: #5a4a1c;
+  font-size: 11px;
+  line-height: 1.4;
+  padding: 10px 14px;
+  border-top: 1px solid #f0e0a8;
+}
+
+.ignis-chat-input-area {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: #fff;
+  border-top: 1px solid #eaeaea;
+}
+
+#ignis-chat-input {
+  flex: 1;
+  border: 1px solid #0A2463;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  outline: none;
+  min-width: 0;
+}
+
+#ignis-chat-input:focus {
+  border-color: #0A2463;
+  box-shadow: 0 0 0 3px rgba(10, 36, 99, 0.08);
+}
+
+#ignis-chat-send {
+  border: none;
+  background: #D4AF37;
+  color: #0A2463;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ignis-whatsapp-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: #25D366;
+  color: #fff !important;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+@keyframes ignisPulse {
+  0% { box-shadow: 0 10px 28px rgba(0,0,0,.28), 0 0 0 0 rgba(10,36,99,.30); }
+  70% { box-shadow: 0 10px 28px rgba(0,0,0,.28), 0 0 0 14px rgba(10,36,99,0); }
+  100% { box-shadow: 0 10px 28px rgba(0,0,0,.28), 0 0 0 0 rgba(10,36,99,0); }
+}
+
+@keyframes ignisIconGlow {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: .92; }
+}
+
+@keyframes ignisTooltipFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes ignisOpen {
+  0% { opacity: 0; transform: translateY(18px) scale(0.94); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes ignisMessageIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ignisDots {
+  0%, 80%, 100% { transform: scale(0.7); opacity: 0.5; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+.ignis-chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ignis-chat-messages::-webkit-scrollbar-thumb {
+  background: rgba(10, 36, 99, 0.18);
+  border-radius: 999px;
+}
+
+.ignis-chat-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media (max-width: 480px) {
+  #ignis-chat-tooltip {
+    right: 12px;
+    bottom: 160px;
+    max-width: 200px;
+    font-size: 13px;
+    padding: 11px 14px;
+  }
+
+  #ignis-chat-window {
+    right: 10px;
+    left: 10px;
+    bottom: 160px;
+    width: auto;
+    height: 72vh;
+    max-height: 650px;
+  }
+
+  #ignis-chat-toggle {
+    right: 16px;
+    bottom: 90px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .ignis-chat-icon {
+    font-size: 28px;
+  }
+
+  .ignis-bubble {
+    max-width: 88%;
+    font-size: 13px;
+  }
+
+  .ignis-quick-options button {
+    font-size: 11px;
+    padding: 8px 10px;
+  }
+}

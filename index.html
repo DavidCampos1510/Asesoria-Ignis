@@ -515,5 +515,59 @@
     <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
     <script src="js/script.js"></script>
+
+    <!-- CHATBOT ASESORÍA LEGAL IGNIS -->
+   <div id="ignis-chatbot">
+  <div id="ignis-chat-tooltip">Hola, ¿en qué puedo ayudarte?</div>
+
+  <button id="ignis-chat-toggle" type="button" aria-label="Abrir chat">
+    <span class="ignis-chat-icon">⚖</span>
+  </button>
+
+  <div id="ignis-chat-window" class="hidden">
+    <div class="ignis-chat-header">
+      <div class="ignis-chat-header-info">
+        <div class="ignis-chat-avatar">⚖</div>
+        <div>
+          <h3>Asesoría Legal Ignis</h3>
+          <p>Orientación general en línea</p>
+        </div>
+      </div>
+
+      <button id="ignis-chat-close" type="button" aria-label="Cerrar chat">✕</button>
+    </div>
+
+    <div id="ignis-chat-messages" class="ignis-chat-messages">
+      <div class="ignis-msg bot">
+        <div class="ignis-bubble">
+          Hola, bienvenido a <strong>Asesoría Legal Ignis</strong>.<br><br>
+          Puedo orientarte de forma general y ayudarte a identificar el tipo de consulta para derivarte por WhatsApp de manera más rápida.
+        </div>
+      </div>
+
+      <div class="ignis-quick-options" id="ignis-main-options">
+        <button type="button" onclick="sendQuickMessage('Mi consulta es laboral')">Laboral</button>
+        <button type="button" onclick="sendQuickMessage('Mi consulta es familiar')">Familia</button>
+        <button type="button" onclick="sendQuickMessage('Mi consulta es civil')">Civil</button>
+        <button type="button" onclick="sendQuickMessage('Mi consulta es herencia')">Penal</button>
+      </div>
+    </div>
+
+    <div class="ignis-chat-notice">
+      La información entregada por este chat es solo referencial y no reemplaza una asesoría legal personalizada.
+    </div>
+
+    <div class="ignis-chat-input-area">
+      <input
+        type="text"
+        id="ignis-chat-input"
+        placeholder="Escribe tu consulta..."
+        maxlength="300"
+        autocomplete="off"
+      />
+      <button id="ignis-chat-send" type="button">Enviar</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
